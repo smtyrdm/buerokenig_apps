@@ -1,0 +1,47 @@
+<odoo>
+
+    <record id="product_attribute_action" model="ir.actions.act_window">
+        <field name="name">Product Attributes</field>
+        <field name="res_model">product.attribute</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_attribute_category_id': active_id}</field>
+        <field name="domain">[('attribute_category_id', '=', active_id)]</field>
+    </record>
+
+    <record id="view_product_attribute_category_kanban" model="ir.ui.view">
+        <field name="name">product.attribute.category.kanban</field>
+        <field name="model">product.attribute.category</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record">
+                            <div class="o_kanban_primary_bottom o_kanban_primary_bottom_small">
+                                <strong>
+                                    <field name="name"/>
+                                </strong>
+                            </div>
+                            <footer>
+                                <button type="button" class="btn btn-primary o_kanban_button_action"
+                                        name="%(product_attribute_action)d">
+                                    Open Attributes
+                                </button>
+                            </footer>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_product_attribute_category" model="ir.actions.act_window">
+        <field name="name">Attribute Categories</field>
+        <field name="res_model">product.attribute.category</field>
+        <field name="view_mode">kanban</field>
+    </record>
+
+    <menuitem id="menu_product_attribute_category" name="Attribute Category"
+              parent="sale.prod_config_main" action="action_product_attribute_category"/>
+
+</odoo>
