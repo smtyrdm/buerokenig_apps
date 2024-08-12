@@ -8,6 +8,21 @@
         <field name="domain">[('attribute_category_id', '=', active_id)]</field>
     </record>
 
+    <record id="view_product_attribute_category_form" model="ir.ui.view">
+        <field name="name">product.attribute.category.form</field>
+        <field name="model">product.attribute.category</field>
+        <field name="arch" type="xml">
+            <form string="Product Attribute Category">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="product_attributes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
     <record id="view_product_attribute_category_kanban" model="ir.ui.view">
         <field name="name">product.attribute.category.kanban</field>
         <field name="model">product.attribute.category</field>
@@ -38,7 +53,7 @@
     <record id="action_product_attribute_category" model="ir.actions.act_window">
         <field name="name">Attribute Categories</field>
         <field name="res_model">product.attribute.category</field>
-        <field name="view_mode">kanban</field>
+        <field name="view_mode">kanban,form</field>
     </record>
 
     <menuitem id="menu_product_attribute_category" name="Attribute Category"
