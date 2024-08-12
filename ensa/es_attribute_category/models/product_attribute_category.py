@@ -18,10 +18,3 @@ class ProductAttributeCategory(models.Model):
             'domain': [('attribute_category_id', '=', self.id)],
             'context': {'default_attribute_category_id': self.id},
         }
-
-
-class ProductAttribute(models.Model):
-    _inherit = 'product.attribute'
-
-    attribute_category_id = fields.Many2one('product.attribute.category', string='Attribute Category', index=True,
-                                            required=False)

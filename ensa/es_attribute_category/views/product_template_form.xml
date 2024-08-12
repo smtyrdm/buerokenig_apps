@@ -5,8 +5,12 @@
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//notebook/page[@name='variants']/field[@name='attribute_line_ids']" position="before">
-                <field name="template_attribute_category_id"/>
+                <div>
+                    <label for="attribute_category_id" string="Attribute Category"/>
+                    <field name="attribute_category_id"/>
+                </div>
             </xpath>
+
         </field>
     </record>
 </odoo>
