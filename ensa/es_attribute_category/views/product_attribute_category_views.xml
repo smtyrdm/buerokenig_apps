@@ -40,7 +40,7 @@
                             <footer>
                                 <button type="button" class="btn btn-primary o_kanban_button_action"
                                         name="%(product_attribute_action)d">
-                                    Open Attributes
+                                    List
                                 </button>
                             </footer>
                         </div>
@@ -50,11 +50,14 @@
         </field>
     </record>
 
-    <record id="action_product_attribute_category" model="ir.actions.act_window">
-        <field name="name">Attribute Categories</field>
-        <field name="res_model">product.attribute.category</field>
-        <field name="view_mode">kanban,form</field>
+    <record id="product_attribute_action" model="ir.actions.act_window">
+        <field name="name">Product Attributes</field>
+        <field name="res_model">product.attribute</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_attribute_category_id': active_id}</field>
+        <field name="domain">[('attribute_category_id', '=', active_id)]</field>
     </record>
+
 
     <menuitem id="menu_product_attribute_category" name="Attribute Category"
               parent="sale.prod_config_main" action="action_product_attribute_category"/>
