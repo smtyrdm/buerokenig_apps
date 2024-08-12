@@ -50,4 +50,5 @@
 
     <menuitem id="menu_product_attribute_category" name="Attribute Category"
               parent="sale.prod_config_main" action="action_product_attribute_category"/>
+
 </odoo>
