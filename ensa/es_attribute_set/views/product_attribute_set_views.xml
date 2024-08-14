@@ -1,0 +1,42 @@
+<odoo>
+    <record id="view_product_attribute_set_form" model="ir.ui.view">
+        <field name="name">product.attribute.set.form</field>
+        <field name="model">product.attribute.set</field>
+        <field name="arch" type="xml">
+            <form string="Product Attribute Set">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="attribute_line_ids">
+                            <tree editable="bottom">
+                                <field name="attribute_id"/>
+                                <field name="value_ids" widget="many2many_tags"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_product_attribute_set_tree" model="ir.ui.view">
+        <field name="name">product.attribute.set.tree</field>
+        <field name="model">product.attribute.set</field>
+        <field name="arch" type="xml">
+            <tree string="Product Attribute Set">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="product_attribute_set_action" model="ir.actions.act_window">
+        <field name="name">Product Attribute Sets</field>
+        <field name="res_model">product.attribute.set</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_product_attribute_set"
+              name="Attribute Sets"
+              parent="sale.prod_config_main"
+              action="product_attribute_set_action"/>
+</odoo>

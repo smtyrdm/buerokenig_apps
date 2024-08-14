@@ -48,7 +48,18 @@
         <field name="view_id" ref="view_product_attribute_category_kanban"/>
     </record>
 
+    <record id="action_product_attribute_values" model="ir.actions.act_window">
+        <field name="name">Attribute Values</field>
+        <field name="res_model">product.template.attribute.value</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="product.product_template_attribute_value_view_tree"/>
+    </record>
+
+
     <menuitem id="menu_product_attribute_category" name="Attribute Category"
               parent="sale.prod_config_main" action="action_product_attribute_category"/>
+
+    <menuitem id="menu_product_attribute_values" name="Attribute Values"
+              parent="sale.prod_config_main" action="action_product_attribute_values"/>
 
 </odoo>
