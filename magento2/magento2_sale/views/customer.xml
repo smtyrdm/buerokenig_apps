@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="magento_customer_action" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,kanban,form,pivot</field>
+        <field name="view_id" ref="base.view_partner_tree"/>
+        <field name="domain">[('magento','=','True')]</field>
+        <field name="context">{'search_default_not_child': 1}</field>
+        <field name="help" type="html">
+            <p class="oe_view_no content_create">
+                Click to create a Customer.
+            </p>
+        </field>
+    </record>
+
+
+</odoo>

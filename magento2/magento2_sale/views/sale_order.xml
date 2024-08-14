@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+        <record id="magento_order_action" model="ir.actions.act_window">
+            <field name="name">Orders</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="view_id" ref="sale.view_quotation_tree_with_onboarding"/>
+            <!-- 22.04.2024 engin -->
+            <field name="search_view_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+            <field name="domain">[('magento','=','True')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_no content_create">
+                    Click to create an Order.
+                </p>
+            </field>
+        </record>
+    
+</odoo>

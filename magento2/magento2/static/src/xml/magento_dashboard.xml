@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="Magento_Dashboard">
+        <div style="padding:20px">
+                <t t-name="Dashboard">
+                    <div class="oh_dashboards" style="background-color: #ede7f6;">
+                        <div class="container-fluid o_pos_dashboard"/>
+                    </div>
+                 </t>
+
+                <t t-name="Magento_User">
+                <div style="padding: 10px;">
+                    <section class="magento_main_section" id="main_section_magento">
+                        <div class="row">
+                            <div class="col-sm-12 mb-4">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-8">
+                                        <h1 class="section-header">Magento Dashboard</h1>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-4">
+                                        <center>
+                                        <form class="form-group" style="border: 2px solid #776eF9">
+                                            <select id="dependent_values" class="form-control">
+                                                <option id="this_year"
+                                                        value="this_year">This Year</option>
+                                                <option id="this_quarter"
+                                                        value="this_quarter">This Quarter</option>
+                                                <option id="this_month" value="this_month"
+                                                        selected="">This Month</option>
+                                                <option id="this_week"
+                                                        value="this_week">This Week</option>
+                                            </select>
+                                        </form>
+                                        </center>
+                                    </div>
+                                </div>
+                                <hr/>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+            <div>
+<!--                    <t t-name="magento_dash_buttons">-->
+<!--                        <section class="magento_dashboard_main_section" id="main_section_manager">-->
+<!--                            <div class="magento_dash_cards row">-->
+<!--                                <div class="col-sm-12 col-md-3">-->
+<!--                                    <div class="dashboard-card my_orders"-->
+<!--                                         style="background-color: #F96E6E;">-->
+<!--                                        <div class="row" style="height: 100px; padding: 10px">-->
+<!--                                            <div class="dashboard-card-tile">-->
+<!--                                                <i class="fa fa-shopping-cart"-->
+<!--                                                   style="color:white; font-size:40px; margin-left: 25px;-->
+<!--                                                       margin-top: 3px;"/>-->
+<!--                                            </div>-->
+<!--                                            <div class="div_val">-->
+<!--                                                <span id="total_this_year"/>-->
+<!--                                                <span id="total_this_quarter"/>-->
+<!--                                                <span id="total_this_month"/>-->
+<!--                                                <span id="total_this_week"/>-->
+<!--                                            </div>-->
+<!--                                            <h2 style="-->
+<!--                                                    text-align: left;-->
+<!--                                                    color: white;-->
+<!--                                                    margin-left: 33px;-->
+<!--                                                    margin-top: 13px;">-->
+<!--                                                Sale Amount-->
+<!--                                            </h2>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-sm-12 col-md-3">-->
+<!--                                    <div class="dashboard-card total_invoiced"-->
+<!--                                         style="background-color: #776EF9;">-->
+<!--                                        <div class="row" style="height: 100px; padding: 10px">-->
+<!--                                            <div class="dashboard-card-tile">-->
+<!--                                                <i class="fa fa-money"-->
+<!--                                                   style="color:white; font-size:40px; margin-left: 25px;-->
+<!--                                                       margin-top: 3px;"/>-->
+<!--                                            </div>-->
+<!--                                            <div class="div_val">-->
+<!--                                                <span id="invoiced_this_year"/>-->
+<!--                                                <span id="invoiced_this_quarter"/>-->
+<!--                                                <span id="invoiced_this_month"/>-->
+<!--                                                <span id="invoiced_this_week"/>-->
+<!--                                            </div>-->
+<!--                                            <h2 style="-->
+<!--                                                    text-align: left;-->
+<!--                                                    color: white;-->
+<!--                                                    margin-left: 33px;-->
+<!--                                                    margin-top: 13px;">-->
+<!--                                                Total Invoiced-->
+<!--                                            </h2>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                             </div>-->
+<!--                        </section>-->
+<!--                    </t>-->
+
+
+
+
+                <!---->
+
+                    <div class="row mt-4" style="padding: 20px;">
+                        <div class="sales_graph col-12 col-sm-12 col-md-4"
+                             style="padding:10px; background-color: White;
+                                    border-radius: 10px; box-shadow: 1px 0px 4px;">
+                            <div class="sales_count_graph"
+                                 style="margin: 15px;">
+                                <div class="chart-container">
+                                    <h3 style="font-size: 1.5em;">Sales</h3>
+                                    <hr/>
+                                    <form class="form-group col-6">
+                                        <select id="total_sales" class="form-control" style="width: 170 px;">
+                                            <option id="sales_today"
+                                                    value="sales_today">Today</option>
+                                            <option id="sales_7"
+                                                    value="sales_7">Last 7 Days</option>
+                                        </select>
+                                        <br/>
+                                        <h3 id="total_today"/>
+                                        <h3 id="total_days_7"/>
+                                    </form>
+                                    <div class="chart">
+                                        <canvas id="canvas" width="400" height="400"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="growth_chart col-12 col-sm-12 col-md-8">
+                            <div class="growth_chart_div"
+                                 style="padding:10px; background-color: White;
+                                        border-radius: 10px; box-shadow: 1px 0px 4px;">
+                                <div class="chart-container" style="margin: 15px;">
+                                    <h3 style="font-size: 1.5em;">Annual Sales</h3>
+                                    <h3 id="total_year">
+                                    </h3>
+                                    <hr/>
+                                    <div class="chart">
+                                        <canvas id="canvas_line" width="800" height="455"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+    </t>
+</templates>
+
+

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--    Magento Taxes-->
+    <record id="magento_taxes_tree" model="ir.ui.view">
+        <field name="name">magento.taxes.tree</field>
+        <field name="model">magento.account.taxes</field>
+        <field name="arch" type="xml">
+            <tree string="Magento Taxes">
+                <field name="tax_country_id"/>
+                <field name="rate"/>
+                <field name="code"/>
+                <field name="tax_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="magento_taxes_form" model="ir.ui.view">
+        <field name="name">magento.account.taxes.form</field>
+        <field name="model">magento.account.taxes</field>
+        <field name="arch" type="xml">
+            <form string="Magento Taxes From">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="code"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="tax_country_id"/>
+                            <field name="rate"/>
+                        </group>
+                        <group>
+                            <field name="tax_id" options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="magento_taxes_action" model="ir.actions.act_window">
+        <field name="name">Magento Taxes</field>
+        <field name="res_model">magento.account.taxes</field>
+        <field name="view_mode">kanban,tree,form,pivot</field>
+        <field name="view_id" ref="magento2.magento_taxes_tree"/>
+        <field name="help" type="html">
+            <p class="oe_view_no content_create">
+                Click to create a Magento Taxes
+            </p>
+        </field>
+    </record>
+
+</odoo>

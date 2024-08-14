@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <menuitem id="magento_main_menu" name="Magento" sequence="1" web_icon="magento2,static/description/icon.png"/>
+        <menuitem id="magento_dashboard" name="Dashboard" sequence="0"
+                  parent="magento_main_menu"
+                  action="magento_dashboard_action"/>
+
+        <!-- configuration -->
+        <menuitem id="magento_configuration" name="Configuration" sequence="10"
+                  parent="magento_main_menu" groups="base.user_admin"/>
+        <menuitem id="magento_configuration_settings" name="Settings" sequence="1"
+                  parent="magento_configuration"
+                  action="magento_settings_action"/>
+        <menuitem id="magento_configuration_cron_settings" name="Cron Settings" sequence="2"
+                  parent="magento_configuration"
+                  action="magento_settings_cron_action"/>
+        <menuitem id="magento_configuration_logging" name="Logging" sequence="2"
+                  parent="magento_configuration"
+                  action="magento_logging_action"/>
+
+        <!-- Stores -->
+        <menuitem id="magento_web_store" name="Stores" parent="magento_main_menu" sequence="3"
+                  groups="base.user_admin"/>
+        <menuitem action="magento_website_action" id="magento_website" name="Magento Website"
+                  parent="magento2.magento_web_store" sequence="0"/>
+        <menuitem action="magento_store_action" id="magento_store" name="Magento Store"
+                  parent="magento2.magento_web_store" sequence="1"/>
+        <!-- Account -->
+        <menuitem id="magento_web_account" name="Account" parent="magento_main_menu" sequence="4"
+                  groups="base.user_admin"/>
+        <menuitem action="magento_taxes_action" id="magento_taxes" name="Magento Taxes" sequence="0"
+                  parent="magento2.magento_web_account"/>
+        <menuitem action="magento_payment_action" id="magento_payment" name="Magento Payment" sequence="1"
+                  parent="magento2.magento_web_account"/>
+        <menuitem action="magento_incoterm_action" id="magento_incoterm" name="Magento Incoterm" sequence="2"
+                  parent="magento2.magento_web_account"/>
+
+
+        <!-- Synchronize -->
+        <menuitem id="magento_sync" name="Synchronize" parent="magento_main_menu" sequence="9"/>
+        <menuitem id="fetch_website" name="Fetch website" sequence="1"
+                  parent="magento2.magento_sync"
+                  action="action_fetch_website" groups="base.user_admin"/>
+        <menuitem id="fetch_account" name="Fetch account" sequence="2"
+                  parent="magento2.magento_sync"
+                  action="action_fetch_account" groups="base.user_admin"/>
+        <menuitem id="fetch_customer_groups" name="Fetch Customer Groups" sequence="3"
+                  parent="magento2.magento_sync"
+                  action="action_fetch_customers_group" groups="base.user_admin"/>
+
+        <!-- Customers -->
+        <menuitem id="magento_customers" name="Customers" parent="magento_main_menu" sequence="3"/>
+        <menuitem id="magento_customer_groups" name="Customer Groups" sequence="0"
+                  action="magento_customer_groups_action"
+                  parent="magento2.magento_customers" groups="base.user_admin"/>
+
+        <!-- Products -->
+        <menuitem id="menu_magento_product" name="Magento Products" sequence="4" parent="magento_main_menu"/>
+        <menuitem id="menu_magento_product_parent" name="Products" parent="menu_magento_product" action="action_magento_product"
+                  sequence="1"/>
+
+
+    </data>
+</odoo>

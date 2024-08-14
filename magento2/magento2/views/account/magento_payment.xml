@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--    Magento payment-->
+    <record id="magento_payment_tree" model="ir.ui.view">
+        <field name="name">magento.account.payment.tree</field>
+        <field name="model">magento.account.payment</field>
+        <field name="arch" type="xml">
+            <tree string="Magento Payment">
+                <field name="code"/>
+                <field name="title"/>
+                <field name="payment_term_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="magento_payment_form" model="ir.ui.view">
+        <field name="name">magento.account.payment.form</field>
+        <field name="model">magento.account.payment</field>
+        <field name="arch" type="xml">
+            <form string="Magento payment From">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="title"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="payment_term_id" options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="magento_payment_action" model="ir.actions.act_window">
+        <field name="name">Magento Payment</field>
+        <field name="res_model">magento.account.payment</field>
+        <field name="view_mode">kanban,tree,form,pivot</field>
+        <field name="view_id" ref="magento2.magento_payment_tree"/>
+        <field name="help" type="html">
+            <p class="oe_view_no content_create">
+                Click to create a Magento payment
+            </p>
+        </field>
+    </record>
+
+</odoo>

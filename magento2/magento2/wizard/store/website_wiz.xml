@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="website_fetch_wiz" model="ir.ui.view">
+            <field name="name">Fetch Website Wizard</field>
+            <field name="model">website.fetch.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="website_fetch_type" required="1"/>
+                            </group>
+                            <group></group>
+                        </group>
+                        <p attrs="{'invisible': [('website_fetch_type', '=', 'website')]}">The operation may take some time to complete. It depends on the number of records.
+                            Please wait patiently.
+                        </p>
+                        <p attrs="{'invisible': [('website_fetch_type', '!=', 'stores')]}">It involves syncing website,stores and their values from magento.
+                            The time for this operation depends on the number of products involved. So please wait
+                            patiently.
+                        </p>
+                        <footer>
+                            <button string='Fetch websites and stores' name="fetch_website"
+                                    type="object" class="btn-primary"/>
+                            <button string="Cancel" class="btn-default" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_fetch_website" model="ir.actions.act_window">
+            <field name="name">Fetch website</field>
+            <field name="res_model">website.fetch.wizard</field>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+            <field name="view_ids"
+                   eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'form', 'view_id': ref('website_fetch_wiz')})
+                          ]"
+            />
+        </record>
+
+    </data>
+</odoo>

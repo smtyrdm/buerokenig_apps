@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="sale_magento_id" model="ir.ui.view">
+            <field name="name">Sale Magento Form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='other_information']/group" position="inside">
+                    <group string="Magento">
+                        <field name="magento_id"/>
+                        <field name="magento_status"/>
+                        <field name="magento" string="Magento Boolean"/>
+                    </group>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="magento_post_url" type="object" class="oe_stat_button" icon="fa-external-link"
+                            attrs="{'invisible': [('magento', '=', False)]}">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Magento</span>
+                            <span class="o_stat_text">Shop</span>
+                        </div>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_quotation_tree_with_onboarding" model="ir.ui.view">
+            <field name="name">sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="magento_id"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="sale_order_view_tree" model="ir.ui.view">
+            <field name="name">sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field name="priority">2</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="magento_id"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_status']" position="after">
+                    <field name="magento_status"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="customer_magento_form" model="ir.ui.view">
+            <field name="name">customer.magento</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="category_id" position="after">
+                    <field name="magento_id"/>
+                    <field name="magento"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- tree filter -->
+        <record id="view_inherit_sale_order_filter" model="ir.ui.view">
+            <field name="name">view.inherit.sale.order.search</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='my_quotation']" position="after">
+                    <separator/>
+                    <filter string="Not Magento" name="not_magento"
+                            domain="[('magento_id', '=', False)]"
+                    />
+                </xpath>
+            </field>
+        </record>
+
+        <record id="sale.action_quotations_with_onboarding" model="ir.actions.act_window">
+            <field name="context">{'search_default_not_magento': 1,'search_default_my_quotation':1}</field>
+        </record>
+
+
+    </data>
+</odoo>

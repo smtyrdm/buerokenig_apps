@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Sales -->
+        <menuitem id="magento_sales" name="Sales" parent="magento2.magento_main_menu" sequence="1"/>
+        <menuitem id="magento_order" name="Orders" parent="magento2_sale.magento_sales" action="magento_order_action" sequence="1"/>
+        <!-- Customers/Customers  -->
+        <menuitem id="magento_customer" name="Customers" sequence="1" action="magento_customer_action" parent="magento2.magento_customers"/>
+
+        <!-- Synchronize -->
+        <menuitem id="fetch_customers" name="Fetch Customers" sequence="4"
+                  parent="magento2.magento_sync"
+                  action="action_fetch_customers" groups="base.user_admin"/>
+        <menuitem id="fetch_orders" name="Fetch Orders" sequence="5"
+                  parent="magento2.magento_sync"
+                  action="action_fetch_orders"/>
+
+
+
+    </data>
+</odoo>

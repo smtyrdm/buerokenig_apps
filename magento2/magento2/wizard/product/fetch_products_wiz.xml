@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <!-- Form View Definition -->
+        <record id="product_fetch_wiz" model="ir.ui.view">
+            <field name="name">Fetch Product Wizard</field>
+            <field name="model">product.fetch.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <p>The operation may take some time to complete. It depends on the number of products.
+                                Please wait patiently.</p>
+                        </group>
+                        <footer>
+                            <button string='Fetch Products' name="fetch_products"
+                                    type="object" class="btn-primary"/>
+                            <button string="Cancel" class="btn-default" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action Definition -->
+        <record id="action_fetch_product" model="ir.actions.act_window">
+            <field name="name">Fetch Products</field>
+            <field name="res_model">product.fetch.wizard</field>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+            <field name="view_ids"
+                   eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'form', 'view_id': ref('product_fetch_wiz')})
+                          ]"
+            />
+        </record>
+
+        <!-- Menu Item Definition -->
+        <menuitem id="menu_magento_fetch_products"
+                  name="Fetch Magento Products"
+                  parent="magento2.magento_sync"
+                  action="action_fetch_product"/>
+    </data>
+</odoo>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="magento_dashboard_action" model="ir.actions.client">
+        <field name="name">Magento Dashboard</field>
+        <field name="tag">magento_dashboard_tag</field>
+    </record>
+
+    <!--    Magento Website-->
+    <record id="magento_website_tree" model="ir.ui.view">
+        <field name="name">magento.website.tree</field>
+        <field name="model">magento.website</field>
+        <field name="arch" type="xml">
+            <tree string="Magento Website">
+                <field name="website_name"/>
+                <field name="website_code"/>
+                <field name="default_store"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="magento_website_form" model="ir.ui.view">
+        <field name="name">magento.website.form</field>
+        <field name="model">magento.website</field>
+        <field name="arch" type="xml">
+            <form string="Magento Website From">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="website_name"/>
+                            <field name="website_code"/>
+                        </group>
+                        <group>
+                            <field name="default_store"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--    Magento Store-->
+
+    <record id="magento_store_tree" model="ir.ui.view">
+        <field name="name">magento.stores.tree</field>
+        <field name="model">magento.stores</field>
+        <field name="arch" type="xml">
+            <tree string="Magento Stores">
+                <field name="store_id"/>
+                <field name="store_name"/>
+                <field name="store_code"/>
+                <field name="default_website"/>
+                <field name="lang_id"/>
+
+            </tree>
+
+        </field>
+    </record>
+
+    <record id="magento_stores_form" model="ir.ui.view">
+        <field name="name">magento.stores.form</field>
+        <field name="model">magento.stores</field>
+        <field name="arch" type="xml">
+            <form string="Magento Stores From">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="store_id"/>
+                            <field name="store_name"/>
+                            <field name="store_code"/>
+                        </group>
+                        <group>
+                            <field name="default_website"/>
+                            <field name="lang_id" options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="magento_website_action" model="ir.actions.act_window">
+        <field name="name">Magento Website</field>
+        <field name="res_model">magento.website</field>
+        <field name="view_mode">kanban,tree,form,pivot</field>
+        <field name="view_id" ref="magento2.magento_website_tree"/>
+        <field name="help" type="html">
+            <p class="oe_view_no content_create">
+                Click to create a Magento Website
+            </p>
+        </field>
+    </record>
+    <record id="magento_store_action" model="ir.actions.act_window">
+        <field name="name">Magento Stores</field>
+        <field name="res_model">magento.stores</field>
+        <field name="view_mode">kanban,tree,form,pivot</field>
+        <field name="view_id" ref="magento2.magento_store_tree"/>
+        <field name="help" type="html">
+            <p class="oe_view_no content_create">
+                Click to create a Magento Stores
+            </p>
+        </field>
+    </record>
+
+</odoo>

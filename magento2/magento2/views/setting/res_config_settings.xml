@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="magento_config_settings_view_form" model="ir.ui.view">
+            <field name="name">magento.settings.view.form.inherit.sale</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="11"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" data-string="Magento"
+                         string="Magento"
+                         data-key="magento2">
+                        <h2>API Key</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="access_token"/>
+                                    <field name="access_token"/>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="magento_host"/>
+                                    <field name="magento_host"/>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="magento_admin_url"/>
+                                    <field name="magento_admin_url"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Engin Store/Conf./Sale/Tax  -->
+                        <h2>Calculation Settings</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="magento_tax_catalog_price"/>
+                                    <field name="magento_tax_catalog_price"/>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="magento_tax_shipping_price"/>
+                                    <field name="magento_tax_shipping_price"/>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="magento_tax_discount_price"/>
+                                    <field name="magento_tax_discount_price"/>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="magento_tax_calculation"/>
+                                    <field name="magento_tax_calculation"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End -->
+                    </div>
+                </xpath>
+            </field>
+        </record>
+        <record id="magento_settings_action" model="ir.actions.act_window">
+            <field name="name">Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_id" ref="magento_config_settings_view_form"/>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'magento2'}</field>
+        </record>
+
+    </data>
+</odoo>

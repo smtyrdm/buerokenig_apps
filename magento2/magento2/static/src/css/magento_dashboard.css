@@ -1,0 +1,52 @@
+.dashboard-card
+{
+      box-shadow: 1px 0px 4px;
+      width: 300px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      margin-right: 10px;
+      margin-left: 10px;
+      height: 110px;
+      border-radius: 10px;
+}
+.dashboard-card-tile
+{
+      width: 30%;
+      margin-left: 10px;
+}
+.div_val
+{
+    width: 50%;
+    text-align: right;
+    color:white;
+    font-size: 30px;
+    font-weight: 900;
+    margin-left: 10px;
+}
+
+
+.my_orders, .my_shipments, .my_stores, .amount_due, .total_invoiced, .credit_note, .customers
+{
+    cursor: pointer;
+}
+
+.my_orders:hover, .total_invoiced:hover, .amount_due:hover,
+.my_shipments:hover, .my_stores:hover, .amount_due:hover,
+.credit_note:hover, .customers:hover, .products:hover
+{
+     transform: scale(1.01);
+     transition: 0.2s ease-out;
+}
+
+.sales_graph:hover, .growth_chart_div:hover, .product_pi:hover, .shipment_chart:hover
+{
+    transform: scale(1.01);
+    transition: 0.2s ease-out;
+}
+
+.chart-container {
+    border-radius: 0.3rem;
+    padding: 1rem;
+    margin: 1rem auto;
+
+}

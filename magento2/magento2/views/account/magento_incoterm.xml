@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--    Magento Incoterm-->
+    <record id="magento_incoterm_tree" model="ir.ui.view">
+        <field name="name">magento.account.incoterm.tree</field>
+        <field name="model">magento.account.incoterm</field>
+        <field name="arch" type="xml">
+            <tree string="Magento Incoterm">
+                <field name="code"/>
+                <field name="local_name"/>
+                <field name="english_name"/>
+                <field name="incoterm_id"/>
+                <field name="product_disc_id"/>
+                <field name="product_ship_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="magento_incoterm_form" model="ir.ui.view">
+        <field name="name">magento.account.incoterm.form</field>
+        <field name="model">magento.account.incoterm</field>
+        <field name="arch" type="xml">
+            <form string="Magento Incoterm From">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="code"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="local_name"/>
+                            <field name="english_name"/>
+                        </group>
+                        <group>
+                            <field name="incoterm_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="product_disc_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="product_ship_id" options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="magento_incoterm_action" model="ir.actions.act_window">
+        <field name="name">Magento Incoterm</field>
+        <field name="res_model">magento.account.incoterm</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="magento2.magento_incoterm_tree"/>
+        <field name="help" type="html">
+            <p class="oe_view_no content_create">
+                Click to create a Magento incoterm
+            </p>
+        </field>
+    </record>
+
+</odoo>
