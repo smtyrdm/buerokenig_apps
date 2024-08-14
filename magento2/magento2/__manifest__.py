@@ -24,9 +24,6 @@
              # Store
              'views/store/magento_website.xml',
              'wizard/store/website_wiz.xml',
-             # Products 
-             'views/product/magento_product.xml',
-             'wizard/product/fetch_products_wiz.xml',
              # menu herzaman en altta tanımlaman gereklidir.
              'views/menu.xml',
              ],

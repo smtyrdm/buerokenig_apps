@@ -55,11 +55,5 @@
                   action="magento_customer_groups_action"
                   parent="magento2.magento_customers" groups="base.user_admin"/>
 
-        <!-- Products -->
-        <menuitem id="menu_magento_product" name="Magento Products" sequence="4" parent="magento_main_menu"/>
-        <menuitem id="menu_magento_product_parent" name="Products" parent="menu_magento_product" action="action_magento_product"
-                  sequence="1"/>
-
-
     </data>
 </odoo>

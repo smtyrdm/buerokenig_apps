@@ -4,13 +4,11 @@ access_magento_connector,access_magento_connector,model_magento_connector,base.g
 access_magento_account_taxes,access.magento_account_taxes,model_magento_account_taxes,,1,1,1,1
 access_magento_account_payment,access.magento_account_payment,model_magento_account_payment,,1,1,1,1
 access_magento_account_incoterm,access.magento_account_incoterm,model_magento_account_incoterm,,1,1,1,1
-access_magento_product,access.magento_product,model_magento_product,,1,1,1,1
 access_account_fetch_wizard,access.account_fetch_wizard,model_account_fetch_wizard,,1,1,1,1
 ,,,,,,,
 access_magento_website,access.magento_website,model_magento_website,,1,1,1,1
 access_magento_stores,access.magento_stores,model_magento_stores,,1,1,1,1
 access_website_fetch_wizard,access.website_fetch_wizard,model_website_fetch_wizard,,1,1,1,1
-access_product_fetch_wizard,access.product_fetch_wizard,model_product_fetch_wizard,,1,1,1,1
 ,,,,,,,
 access_magento_customer_group,access.magento_customer_group,model_magento_customer_group,,1,1,1,1
 access_magento_customer_group_fetch_wizard,access.magento_customer_group_fetch_wizard,model_magento_customer_group_fetch_wizard,,1,1,1,1
