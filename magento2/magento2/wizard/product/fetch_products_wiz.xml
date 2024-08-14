@@ -9,8 +9,12 @@
                 <form>
                     <sheet>
                         <group>
+                            <field name="product_type" string="Product Type"/>
+                        </group>
+                        <group>
                             <p>The operation may take some time to complete. It depends on the number of products.
-                                Please wait patiently.</p>
+                                Please wait patiently.
+                            </p>
                         </group>
                         <footer>
                             <button string='Fetch Products' name="fetch_products"
