@@ -9,9 +9,8 @@
                 <form>
                     <sheet>
                         <group>
-                            <field name="product_type" string="Product Type"/>
-                        </group>
-                        <group>
+                            <field name="sku" placeholder="Enter SKU"/>
+                            <field name="product_type" placeholder="Select Product Type"/>
                             <p>The operation may take some time to complete. It depends on the number of products.
                                 Please wait patiently.
                             </p>
@@ -25,6 +24,7 @@
                 </form>
             </field>
         </record>
+
 
         <!-- Action Definition -->
         <record id="action_fetch_product" model="ir.actions.act_window">

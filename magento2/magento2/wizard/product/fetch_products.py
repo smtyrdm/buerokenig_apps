@@ -9,16 +9,29 @@ class ProductFetchWizard(models.Model):
     _name = 'product.fetch.wizard'
     _description = 'Product Fetch Wizard'
 
+    sku = fields.Char(string="SKU")
     product_type = fields.Selection([
-        ('simple', 'Simple Products'),
-        ('configurable', 'Configurable Products'),
-    ], string="Product Type", required=True, default='simple')
+        ('simple', 'Simple'),
+        ('configurable', 'Configurable'),
+    ], string="Product Type", default='simple')
 
     def fetch_products(self):
         """Fetch products from Magento"""
-        product_type = self.product_type
-        search_criteria = f'searchCriteria[filterGroups][0][filters][0][field]=type_id&searchCriteria[filterGroups][0][filters][0][value]={product_type}'
-        url = f'/rest/all/V1/products?{search_criteria}&searchCriteria%5BpageSize%5D=5&searchCriteria%5BcurrentPage%5D=1'
+        if self.sku:
+            self._fetch_product_by_sku(self.sku)
+        else:
+            self._fetch_products_by_type()
+
+    def _fetch_product_by_sku(self, sku):
+        """Fetch a specific product by SKU from Magento"""
+        url = f'/rest/all/V1/products/{sku}'
+        magento_product = self._magento_api_call(url)
+        if magento_product:
+            self._process_product(magento_product)
+
+    def _fetch_products_by_type(self):
+        """Fetch products by type from Magento"""
+        url = f'/rest/all/V1/products?searchCriteria[filterGroups][0][filters][0][field]=type_id&searchCriteria[filterGroups][0][filters][0][value]={self.product_type}'
         magento_products = self._magento_api_call(url)
 
         if not magento_products:
