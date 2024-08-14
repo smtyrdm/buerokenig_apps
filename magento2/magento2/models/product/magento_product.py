@@ -28,3 +28,4 @@ class ProductTemplate(models.Model):
     magento_product_id = fields.Many2one('magento.product', string="Magento Product")
 
 
+
