@@ -5,7 +5,7 @@ class ProductAttributeSet(models.Model):
     _description = 'Product Attribute Set'
 
     name = fields.Char('Name', required=True)
-    attribute_line_ids = fields.One2many(
+    attribute_set_line_ids = fields.One2many(
         'product.attribute.set.line', 'attribute_set_id', string='Attributes')
 
 class ProductAttributeSetLine(models.Model):

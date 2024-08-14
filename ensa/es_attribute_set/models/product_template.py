@@ -17,7 +17,7 @@ class ProductTemplate(models.Model):
             existing_attribute_ids = self.attribute_line_ids.mapped('attribute_id.id')
             lines = []
             for attribute_set_id in self.attribute_set_ids:
-                for line in attribute_set_id.attribute_line_ids:
+                for line in attribute_set_id.attribute_set_line_ids:
                     if line.attribute_id.id not in existing_attribute_ids:
                         lines.append((0, 0, {
                             'attribute_id': line.attribute_id.id,
