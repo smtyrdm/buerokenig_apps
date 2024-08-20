@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="es_tree_view_quotation_tree" model="ir.ui.view">
+        <field name="name">es.sale.order.tree</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <tree string="Quotation" class="o_sale_order" sample="1">
+                <!-- SO -->
+                <field name="payment_term_id" readonly="1" class="font-weight-bolder"/>
+                <field name="name" string="SO" readonly="1" decoration-bf="1"/>
+                <field name="state" string="SO Status" readonly="1"
+                       decoration-success="state == 'sale' or state == 'done'"
+                       decoration-info="state == 'draft' or state == 'sent'" widget="badge" optional="show"/>
+                <field name="is_sale_sent_selection" string="SO Mail" readonly="1"
+                       decoration-success="is_sale_sent_selection == 'true'"
+                       decoration-danger="is_sale_sent_selection == 'false'"
+                       decoration-warning="is_sale_sent_selection == 'warning'" widget="badge"/>
+
+                <!-- PO -->
+                <field name="purchase_order_no" readonly="1" string="PO" class="font-weight-bolder"/>
+                <field name="is_purchase_sent" string="PO Mail"
+                       decoration-success="is_purchase_sent == 'true'"
+                       decoration-danger="is_purchase_sent == 'false'"
+                       decoration-warning="is_purchase_sent == 'warning'" widget="badge"/>
+                <field name="picking_name" readonly="1" string="DS" class="font-weight-bolder"/>
+
+                <!-- IN -->
+                <field name="inv_no" readonly="1" string="RE" class="font-weight-bolder"/>
+                <field name="is_move_sent" readonly="1" string="RE Mail"
+                       decoration-success="is_move_sent == 'true'"
+                       decoration-danger="is_move_sent == 'false'"
+                       decoration-warning="is_move_sent == 'warning'" widget="badge"/>
+                <field name="payment_status" readonly="1" string="RE Payment"
+                       decoration-success="payment_status in ['Paid', 'Reversed']"
+                       decoration-danger="payment_status == 'Not Paid'"
+                       decoration-info="payment_status == 'In Payment'"
+                       decoration-bf="payment_status == 'No invoice'"
+                       decoration-warning="payment_status == 'Partially Paid'"
+                       widget="badge"/>
+                <field name="is_sent_control" invisible="1"/>
+                <field name="sent_tracking" string="Tracking" widget="boolean_toggle" readonly="0" invisible="1"/>
+            </tree>
+
+        </field>
+    </record>
+
+
+
+    <record id="sale_order_view_search_inherit_quotation" model="ir.ui.view">
+        <field name="name">es.sale.order.filter</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search">
+                <filter name="filter_is_sent" string="Is Sent"
+                        domain="[('sent_tracking', '=', True),('is_sent_control', '=', False)]"/>
+            </xpath>
+<!--            <xpath expr="//search/group">-->
+<!--            <filter string="Order" name="order" domain="[]" context="{'group_by':'order_id'}"/>-->
+<!--            </xpath>-->
+        </field>
+    </record>
+
+
+    <record id="es_tree_order_action" model="ir.actions.act_window">
+        <field name="name">Orders</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="view_id" ref="es_tree_view_quotation_tree"/>
+        <field name="search_view_id" ref="sale_order_view_search_inherit_quotation"/>
+        <field name="context">{'search_default_filter_is_sent': 1}</field>
+        <field name="help" type="html">
+            <p class="oe_view_no content_create">
+                Click to create an Order.
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="root_tracking" action="es_tree_order_action" name="Tracking" sequence="31"
+              groups="sales_team.group_sale_salesman,sales_team.group_sale_manager"/>
+    <menuitem name="Tracking"
+              action="es_tree_order_action"
+              id="sale_in_tracking"
+              parent="sale.sale_menu_root"
+              sequence="4"
+              groups="sales_team.group_sale_salesman,sales_team.group_sale_manager"
+    />
+
+</odoo>

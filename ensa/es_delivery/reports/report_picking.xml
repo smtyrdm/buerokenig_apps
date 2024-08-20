@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="es_report_picking" inherit_id="stock.report_picking">
+            <xpath expr="//p[@t-field='o.scheduled_date']" position="replace">
+                   <p t-field="o.week_date"/>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="es_view_picking_form_inherit" model="ir.ui.view">
+        <field name="name">es.view.picking.form.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='scheduled_date']" position="after">
+                <field name="week_date" invisible="1" widget="date_format_week"/>
+<!--                <field name="incoterm_description" invisible="1"/>-->
+            </xpath>
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="sale_delivery_date" widget="date_format_week"/>
+            </xpath>
+            <!-- form line tree -->
+<!--            <xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='date']" position="attributes">-->
+<!--                <attribute name="widget">date_format_week</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='date']" position="after">-->
+<!--                <field name="week_date" invisible="1"/>-->
+<!--            </xpath>-->
+
+
+        </field>
+    </record>
+
+
+</odoo>

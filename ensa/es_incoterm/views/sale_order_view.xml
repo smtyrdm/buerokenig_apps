@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="es_sale_order_incoterm_form_view" model="ir.ui.view">
+            <field name="name">es.sale.order.incoterm.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='note']" position="before">
+                    <group colspan="6" string="Delivery Note">
+                        <field name="delivery_note" nolabel="1" options="{'codeview': true}" readonly="1"/>
+                    </group>
+                </xpath>
+<!-- es_delivery eklendi zaten burda eklemeye gerek yok incoterm-->
+<!--                <field name="payment_term_id" position="after">-->
+<!--                    <field name="incoterm"/>-->
+<!--                </field>-->
+            </field>
+        </record>
+    </data>
+</odoo>

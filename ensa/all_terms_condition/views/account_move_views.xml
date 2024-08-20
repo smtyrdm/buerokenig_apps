@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account_move_term" model="ir.ui.view">
+        <field name="name">account.move.term</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//div[@name='journal_div']" position="after">
+                    <field name="template_ids_domain" invisible="1"/>
+                    <label for="template_ids" string="T&amp;C"/>
+                    <div class="d-inline-flex">
+                        <field name="template_ids" widget="many2many_tags" domain="template_ids_domain"/>
+                        <button type="object" name="button_reflesh_terms_conditions"
+                                class="btn-sm btn-link mb4 fa fa-refresh"
+                                aria-label="Refresh Terms and Condition" title="Refresh Terms and Condition"/>
+                    </div>
+                </xpath>
+
+                <xpath expr="//field[@name='narration']" position="after">
+                    <group colspan="8" string="T&amp;C Note">
+                        <field colspan="8" name="sale_term" widget="html" nolabel="1"/>
+                    </group>
+                </xpath>
+
+            </data>
+        </field>
+    </record>
+
+    <record id="account_move_letter_template_formats" model="ir.actions.act_window">
+        <field name="name">Term And Condition</field>
+        <field name="res_model">term.condition</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('active_model','=','account.move')]</field>
+        <field name="context">{'default_active_model': 'account.move'}</field>
+    </record>
+
+
+</odoo>

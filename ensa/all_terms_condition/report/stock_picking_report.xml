@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sale_term_report_picking" inherit_id="stock.report_delivery_document">
+        <xpath expr="//div[@t-if='o.signature']" position="after">
+            <p t-if="not is_html_empty(o.sale_term)">
+                <span t-field="o.sale_term"/>
+            </p>
+        </xpath>
+    </template>
+</odoo>

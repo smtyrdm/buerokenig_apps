@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="es_delivery_document" inherit_id="stock.report_delivery_document">
+            <xpath expr="//div[@name='div_sched_date']" position="replace">
+                <div t-if="o.state" class="col-auto" name="div_sched_date">
+                    <strong>Shipping Date:</strong>
+                    <t t-if="o.week_date">
+                        <p t-field="o.week_date"/>
+                    </t>
+                    <t t-else="">
+                        <t t-if="o.state == 'done'">
+                            <p t-field="o.date_done"/>
+                        </t>
+                        <t t-if="o.state != 'done'">
+                            <p t-field="o.scheduled_date"/>
+                        </t>
+                    </t>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="l10n_layout_din5008_purchase_inherit" inherit_id="l10n_din5008.external_layout_din5008">
+        <xpath expr="//div[@t-esc='doc_address[1]']" position="after">
+          <t t-if="o and 'l10n_din5008_phone' in o">
+            <div t-field="o.l10n_din5008_phone"/>
+          </t>
+          <t t-if="o and 'l10n_din5008_email' in o">
+            <div t-field="o.l10n_din5008_email"/>
+          </t>
+        </xpath>
+    </template>
+</odoo>

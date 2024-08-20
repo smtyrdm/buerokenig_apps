@@ -1,0 +1,173 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* all_terms_condition
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-15 13:21+0000\n"
+"PO-Revision-Date: 2023-11-15 13:21+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_term_condition__active
+msgid "Active"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_term_condition__active_model
+msgid "Active Model"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_term_condition__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_term_condition__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_term_condition__default
+msgid "Default"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_term_condition__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_term_condition__id
+msgid "ID"
+msgstr ""
+
+#. module: all_terms_condition
+#: model_terms:ir.ui.view,arch_db:all_terms_condition.account_letter_template_form
+msgid "Invoice Term"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model,name:all_terms_condition.model_account_move
+msgid "Journal Entry"
+msgstr "Buchungssatz"
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_term_condition____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_term_condition__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_term_condition__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_term_condition__name
+msgid "Name"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_sale_order__template_ids
+msgid "Note Terms"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model,name:all_terms_condition.model_purchase_order
+msgid "Purchase Order"
+msgstr "Bestellung"
+
+#. module: all_terms_condition
+#: model_terms:ir.ui.view,arch_db:all_terms_condition.sale_letter_template_tree
+msgid "Sale Term"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model,name:all_terms_condition.model_sale_order
+msgid "Sales Order"
+msgstr "Verkaufsauftrag"
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_term_condition__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_term_condition__state
+msgid "Status"
+msgstr ""
+
+#. module: all_terms_condition
+#: model_terms:ir.ui.view,arch_db:all_terms_condition.account_letter_template_form
+msgid "Subject of the letter"
+msgstr ""
+
+#. module: all_terms_condition
+#: model_terms:ir.ui.view,arch_db:all_terms_condition.sale_form_sale_order_term
+msgid "T&C"
+msgstr "AGB"
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_term_condition__template
+msgid "Template"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_account_bank_statement_line__template_ids
+#: model:ir.model.fields,field_description:all_terms_condition.field_account_move__template_ids
+#: model:ir.model.fields,field_description:all_terms_condition.field_account_payment__template_ids
+#: model:ir.model.fields,field_description:all_terms_condition.field_purchase_order__template_ids
+#: model:ir.model.fields,field_description:all_terms_condition.field_stock_picking__template_ids
+msgid "Templates"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_account_bank_statement_line__all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_account_move__all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_account_payment__all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_purchase_order__all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_sale_order__all_terms_condition
+#: model:ir.model.fields,field_description:all_terms_condition.field_stock_picking__all_terms_condition
+#: model_terms:ir.ui.view,arch_db:all_terms_condition.account_move_term
+#: model_terms:ir.ui.view,arch_db:all_terms_condition.purchase_order_term
+#: model_terms:ir.ui.view,arch_db:all_terms_condition.stock_picking_term
+msgid "Term"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.actions.act_window,name:all_terms_condition.account_move_letter_template_formats
+#: model:ir.actions.act_window,name:all_terms_condition.purchase_letter_template_formats
+#: model:ir.actions.act_window,name:all_terms_condition.sale_letter_template_formats
+#: model:ir.actions.act_window,name:all_terms_condition.stock_picking_letter_template_formats
+#: model:ir.ui.menu,name:all_terms_condition.menu_action_account_term_form
+#: model:ir.ui.menu,name:all_terms_condition.menu_action_purchase_term_form
+#: model:ir.ui.menu,name:all_terms_condition.menu_action_all_terms_condition_form
+#: model:ir.ui.menu,name:all_terms_condition.menu_action_stock_term_form
+msgid "Term And Condition"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model,name:all_terms_condition.model_term_condition
+#: model_terms:ir.ui.view,arch_db:all_terms_condition.account_move_term
+#: model_terms:ir.ui.view,arch_db:all_terms_condition.purchase_order_term
+#: model_terms:ir.ui.view,arch_db:all_terms_condition.stock_picking_term
+msgid "Terms and Conditions"
+msgstr ""
+
+#. module: all_terms_condition
+#: model:ir.model,name:all_terms_condition.model_stock_picking
+msgid "Transfer"
+msgstr ""

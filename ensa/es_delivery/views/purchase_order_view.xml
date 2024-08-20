@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="es_purchase_order_form_inherit" model="ir.ui.view">
+        <field name="name">es.purchase.order.form.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <!-- form -->
+            <xpath expr="//field[@name='order_line']/tree/field[@name='date_planned']" position="attributes">
+                <attribute name="widget">date_format_week</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='date_planned']" position="after">
+                <field name="week_date" invisible="1"/>
+            </xpath>
+
+            <!-- form line tree -->
+            <xpath expr="//field[@name='order_line']/tree/field[@name='date_planned']" position="attributes">
+                <!--  required="not display_type" force_save="1" -->
+                <!--  <field name="date_planned" optional="hide" force_save="1" widget="date_format_week"/>-->
+                <attribute name="widget">date_format_week</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='date_planned']" position="after">
+                <field name="week_date" invisible="1"/>
+            </xpath>
+            <!--  //group//group[field[@name='notes']]  -->
+            <xpath expr="//field[@name='notes']" position="before">
+                <field name="sale_week" invisible="1"/>
+                <group string="Sale Delivery Note">
+                    <field name="sale_delivery_note" nolabel="1"/>
+                </group>
+
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

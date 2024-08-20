@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="sale_form_sale_order_term" model="ir.ui.view">
+        <field name="name">sale.order.form.term.invoice</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//page[@name='other_information']" position="after">
+                    <!-- AGB -->
+                    <page string="T&amp;C">
+                        <group>
+                            <!-- invisible="1" -->
+                            <field name="template_ids_domain"/>
+                            <!-- domain="[('state', '=', state), ('active_model','=','sale.order')]" -->
+                            <field name="template_ids" widget="many2many_tags" string="T&amp;C"
+                                   domain="template_ids_domain" attrs="{'readonly': [('name', '=', 'New')]}"/>
+                        </group>
+                        <!-- widget="ace" options="{'mode': 'python'}" -->
+                        <!-- class="oe-bordered-editor" options="{'style-inline': true, 'codeview': true }" -->
+                        <field name="sale_term" widget="html" />
+
+                    </page>
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <!-- template_ids_domain -> web_domain_field modülü ile çalışıyor. -->
+                    <field name="template_ids_domain"/>
+                    <label for="template_ids" string="T&amp;C"/>
+                    <div class="d-inline-flex" >
+                        <field name="template_ids" widget="many2many_tags"
+                               domain="template_ids_domain" attrs="{'readonly': [('name', '=', 'New')]}" />
+                        <button type="object" name="button_reflesh_terms_conditions" class="btn-sm btn-link mb4 fa fa-refresh"
+                                aria-label="Refresh Terms and Condition" title="Refresh Terms and Condition" attrs="{'readonly': [('name', '=', 'New')]}"/>
+                    </div>
+
+
+                </xpath>
+                <xpath expr="//group[@name='note_group']" position="after">
+                    <group colspan="6" string="T&amp;C">
+                        <!--                        <field name="partner_lang" invisible="1"/>-->
+                        <!-- widget="html" class="oe-bordered-editor" options="{'style-inline': true, 'codeview': true }" -->
+                        <field colspan="6" name="sale_term" widget="html"/>
+                        <field name="json_field"/>
+                        <field name="payment_term_note"/>
+                        <field name="json_payment"/>
+
+                    </group>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+
+    <record id="sale_letter_template_formats" model="ir.actions.act_window">
+        <field name="name">Term And Condition</field>
+        <field name="res_model">term.condition</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('active_model','=','sale.order')]</field>
+        <field name="context">{'default_active_model': 'sale.order'}</field>
+    </record>
+
+    <menuitem id="menu_action_sale_term_form" parent="sale.sale_menu_root" action="sale_letter_template_formats"
+              sequence="34"/>
+</odoo>

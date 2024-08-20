@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sale_term_report_purchase" inherit_id="purchase.report_purchaseorder_document">
+        <xpath expr="//p[@t-field='o.notes']" position="after">
+            <p t-if="not is_html_empty(o.sale_term)">
+                <span t-field="o.sale_term"/>
+            </p>
+            <!--<p t-field="o.sale_term"/>-->
+        </xpath>
+    </template>
+
+    <template id="sale_term_report_purchase_quotation" inherit_id="purchase.report_purchasequotation_document">
+        <xpath expr="//p[@t-field='o.notes']" position="after">
+            <p t-if="not is_html_empty(o.sale_term)">
+                <span t-field="o.sale_term"/>
+            </p>
+            <!--<p t-field="o.sale_term"/>-->
+        </xpath>
+    </template>
+</odoo>

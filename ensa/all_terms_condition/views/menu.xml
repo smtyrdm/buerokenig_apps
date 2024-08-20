@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Sale Order / Conf. / -->
+    <menuitem id="menu_action_sale_term_form" parent="sale.menu_sales_config" action="sale_letter_template_formats"
+              name="Term and Condition" sequence="10"/>
+    <!-- Purchase Order / Conf. / -->
+    <menuitem id="menu_action_purchase_term_form" parent="purchase.menu_purchase_config"
+              action="purchase_letter_template_formats"
+              name="Term and Condition" sequence="10"/>
+    <!-- Account Move / Conf. /-->
+    <menuitem id="menu_action_account_term_form" parent="account.menu_finance_configuration"
+              action="account_move_letter_template_formats"
+              name="Term and Condition" sequence="10"/>
+
+    <!-- Stock / Conf. / -->
+    <menuitem id="menu_action_stock_term_form" parent="stock.menu_stock_config_settings"
+              action="stock_picking_letter_template_formats"
+              name="Term and Condition" sequence="10"/>
+</odoo>

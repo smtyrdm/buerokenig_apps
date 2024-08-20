@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sale_term_inherit_sale_order_document" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//p[@t-field='doc.note']" position="after">
+            <p t-if="not is_html_empty(doc.sale_term)">
+                <span t-field="doc.sale_term"/>
+            </p>
+        </xpath>
+    </template>
+</odoo>

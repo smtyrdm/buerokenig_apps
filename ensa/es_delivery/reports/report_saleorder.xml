@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="es_external_layout_din5008_inherit_purchase" inherit_id="l10n_de.external_layout_din5008">
+            <xpath expr="//t[@t-foreach='template_data']" position="after">
+                <tr t-if="doc and doc._name == 'sale.order' and doc.week_date">
+                    <td class="o_bold">Delivery Date</td>
+                    <td>
+                        <t t-esc="doc.week_date"/>
+                    </td>
+                </tr>
+            </xpath>
+        </template>
+    </data>
+</odoo>

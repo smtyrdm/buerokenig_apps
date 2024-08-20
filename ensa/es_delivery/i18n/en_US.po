@@ -1,0 +1,109 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* es_delivery
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-13 09:00+0000\n"
+"PO-Revision-Date: 2023-11-13 09:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: es_delivery
+#: code:addons/es_delivery/models/sale_order.py:0
+#, python-format
+msgid "Customer Reference"
+msgstr ""
+
+#. module: es_delivery
+#: code:addons/es_delivery/models/purchase_order.py:0
+#: code:addons/es_delivery/models/purchase_order.py:0
+#: code:addons/es_delivery/models/sale_order.py:0
+#: model:ir.model.fields,field_description:es_delivery.field_purchase_order__week_date
+#: model:ir.model.fields,field_description:es_delivery.field_purchase_order_line__week_date
+#: model:ir.model.fields,field_description:es_delivery.field_sale_order__week_date
+#: model_terms:ir.ui.view,arch_db:es_delivery.es_external_layout_din5008_inherit_purchase
+#, python-format
+msgid "Delivery Date"
+msgstr ""
+
+#. module: es_delivery
+#: code:addons/es_delivery/models/sale_order.py:0
+#, python-format
+msgid "Expiration"
+msgstr ""
+
+#. module: es_delivery
+#: code:addons/es_delivery/models/sale_order.py:0
+#, python-format
+msgid "Lieferbedingung"
+msgstr "Incoterm"
+
+#. module: es_delivery
+#: code:addons/es_delivery/models/sale_order.py:0
+#, python-format
+msgid "Ansprechpartner"
+msgstr "Salesperson"
+
+#. module: es_delivery
+#: code:addons/es_delivery/models/sale_order.py:0
+#, python-format
+msgid "Order Date"
+msgstr ""
+
+#. module: es_delivery
+#: code:addons/es_delivery/models/sale_order.py:0
+#, python-format
+msgid "Order No."
+msgstr ""
+
+#. module: es_delivery
+#: model:ir.model,name:es_delivery.model_purchase_order
+msgid "Purchase Order"
+msgstr ""
+
+#. module: es_delivery
+#: model:ir.model,name:es_delivery.model_purchase_order_line
+msgid "Purchase Order Line"
+msgstr ""
+
+#. module: es_delivery
+#: code:addons/es_delivery/models/sale_order.py:0
+#, python-format
+msgid "Quotation Date"
+msgstr ""
+
+#. module: es_delivery
+#: code:addons/es_delivery/models/sale_order.py:0
+#, python-format
+msgid "Quotation No."
+msgstr ""
+
+#. module: es_delivery
+#: model:ir.model,name:es_delivery.model_sale_order
+msgid "Sales Order"
+msgstr ""
+
+#. module: es_delivery
+#: code:addons/es_delivery/models/sale_order.py:0
+#, python-format
+msgid "Salesperson"
+msgstr ""
+
+#. module: es_delivery
+#: code:addons/es_delivery/models/stock_picking.py:0
+#: model:ir.model.fields,field_description:es_delivery.field_stock_picking__week_date
+#, python-format
+msgid "Scheduled Date"
+msgstr ""
+
+#. module: es_delivery
+#: model:ir.model,name:es_delivery.model_stock_picking
+msgid "Transfer"
+msgstr ""

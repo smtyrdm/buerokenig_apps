@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_picking_form_inherit_mrp" model="ir.ui.view">
+            <field name="name">view.picking.form.inherit.mrp</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="after">
+                    <group colspan="6" string="Delivery Notes">
+                        <field colspan="6" name="delivery_note"
+                               nolabel="1"  widget="html" class="oe-bordered-editor"
+                               options="{'style-inline': true, 'codeview': true }"
+                               readonly="1"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

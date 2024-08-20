@@ -1,0 +1,61 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* es_delivery
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-07 13:07+0000\n"
+"PO-Revision-Date: 2023-11-07 13:07+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: es_delivery
+#: code:addons/es_delivery/models/sale_order.py:0
+#: code:addons/es_delivery/models/purchase_order.py:0
+#: model:ir.model.fields,field_description:es_delivery.field_sale_order__week_date
+#: model:ir.model.fields,field_description:es_delivery.field_purchase_order__week_date
+#: model_terms:ir.ui.view,arch_db:es_delivery.es_external_layout_din5008_inherit_sale
+#: model_terms:ir.ui.view,arch_db:es_delivery.es_external_layout_din5008_inherit_purchase
+#, python-format
+msgid "Delivery Date"
+msgstr "Liefertermin"
+
+#. module: es_delivery
+#: model:ir.model.fields,field_description:es_delivery.field_sale_order__week_date
+msgid "Liefertermin"
+msgstr ""
+
+#. module: es_delivery
+#: model:ir.model,name:es_delivery.model_sale_order
+msgid "Sales Order"
+msgstr "Verkaufsauftrag "
+
+#. module: es_delivery
+#: code:addons/es_delivery/models/sale_order.py:0
+#, python-format
+msgid "Incoterm"
+msgstr "Lieferbedingung"
+
+
+#. module: es_delivery
+#: model_terms:ir.ui.view,arch_db:es_delivery.es_delivery_report_purchasequotation_document
+msgid "<span>Sale Delivery Date : </span>"
+msgstr "<span>Lieferdatum : </span>"
+
+#. module: es_delivery
+#: code:addons/es_delivery/models/purchase_order.py:0
+#, python-format
+msgid "<strong>Sale Delivery Date: </strong>"
+msgstr "<strong>Lieferdatum: </strong>"
+
+#. module: es_delivery
+#: code:addons/es_delivery/models/purchase_order.py:0
+#, python-format
+msgid "Incoterm: "
+msgstr "Lieferbedingung: "

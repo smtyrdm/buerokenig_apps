@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="es_sale_order_form" model="ir.ui.view">
+        <field name="name">es.sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="commitment_date" widget="date_format_week" required="1"/>
+                <field name="week_date" invisible="1"/>
+                <field name="incoterm"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="es_sale_order_tree" model="ir.ui.view">
+        <field name="name">es.sale.order.tree.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='commitment_date']" position="after">
+                <field name="week_date" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='commitment_date']" position="attributes">
+                <attribute name="widget">date_format_week</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="es_sale_quotation_delivery_tree" model="ir.ui.view">
+        <field name="name">es.sale.quotation.tree.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='commitment_date']" position="after">
+                <field name="week_date" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='commitment_date']" position="attributes">
+                <attribute name="widget">date_format_week</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+
+
+        <!--<?xml version="1.0" encoding="utf-8" ?>-->
+        <!--<odoo>-->
+
+        <!--    <record id="es_sale_order" model="ir.ui.view">-->
+        <!--        <field name="name">es.sale.order</field>-->
+        <!--        <field name="model">sale.order</field>-->
+        <!--        <field name="inherit_id" ref="sale.view_order_form"/>-->
+        <!--        <field name="arch" type="xml">-->
+        <!--            <xpath expr="//field[@name='payment_term_id']" position="after">-->
+        <!--                <field name="commitment_date" widget="date_format_week" options="{'limit': 10}"/>-->
+        <!--                <field name="commitment_date" string="Ensa Date" widget="date_ensa"/>-->
+        <!--                <field name="test" widget="multiple_datepicker"/>-->
+        <!--                <field name="week_date" invisible="1"/>-->
+        <!--&lt;!&ndash;                <label for="commitment_date"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;                <div name="commitment_date_div" class="o_row">&ndash;&gt;-->
+        <!--&lt;!&ndash;                    <field name="commitment_date"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;                    <span name="expected_date_span" class="text-muted" attrs="{'invisible': [('commitment_date','=',False)]}"> |&ndash;&gt;-->
+        <!--&lt;!&ndash;                        <field name="week_date"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;                    </span>&ndash;&gt;-->
+        <!--&lt;!&ndash;                </div>&ndash;&gt;-->
+        <!--                <field name="incoterm"/>-->
+        <!--            </xpath>-->
+        <!--        </field>-->
+        <!--    </record>-->
+
+        <!--</odoo>-->

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="purchase_order_term" model="ir.ui.view">
+        <field name="name">purchase.order.term</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='dest_address_id']" position="after">
+                    <field name="template_ids_domain" invisible="1"/>
+                    <label for="template_ids" string="T&amp;C"/>
+                    <div class="d-inline-flex">
+                        <field name="template_ids" widget="many2many_tags" domain="template_ids_domain"/>
+                        <button type="object" name="button_reflesh_terms_conditions"
+                                class="btn-sm btn-link mb4 fa fa-refresh"
+                                aria-label="Refresh Terms and Condition" title="Refresh Terms and Condition"/>
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='notes']/parent::group" position="after">
+                    <group colspan="6" string="T&amp;C">
+                        <field colspan="6" name="sale_term"  widget="html" nolabel="1"/>
+                    </group>
+
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="purchase_letter_template_formats" model="ir.actions.act_window">
+        <field name="name">Term And Condition</field>
+        <field name="res_model">term.condition</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('active_model','=','purchase.order')]</field>
+        <field name="context">{'default_active_model': 'purchase.order'}</field>
+    </record>
+
+
+</odoo>

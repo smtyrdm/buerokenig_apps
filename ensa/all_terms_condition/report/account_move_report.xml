@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sale_term_report_invoice_document" inherit_id="account.report_invoice_document">
+        <!-- commenr -> note -->
+        <xpath expr="//div[@name='comment']" position="after">
+            <p t-if="not is_html_empty(o.sale_term)">
+                <span t-field="o.sale_term"/>
+            </p>
+        <!-- <p t-field="o.sale_term"/>-->
+        </xpath>
+    </template>
+</odoo>

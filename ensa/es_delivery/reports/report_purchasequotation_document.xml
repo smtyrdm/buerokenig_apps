@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="es_delivery_report_purchasequotation_document"
+                  inherit_id="purchase.report_purchasequotation_document">
+            <xpath expr="//span[@t-field='order_line.date_planned']" position="replace">
+                <span t-field="order_line.week_date"/>
+            </xpath>
+            <xpath expr="//p[@t-field='o.notes']" position="after">
+                <t t-if="o.sale_delivery_note">
+                    <span>Sale Delivery Date : </span><span t-field="o.sale_delivery_note"/>
+                </t>
+            </xpath>
+        </template>
+    </data>
+</odoo>
+
+
+

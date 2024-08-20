@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account_letter_template_form" model="ir.ui.view">
+        <field name="name">sale.term.condition.form</field>
+        <field name="model">term.condition</field>
+        <field name="arch" type="xml">
+            <form string="Invoice Term">
+                <sheet>
+                    <div class="oe_title" name="title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="Subject of the letter"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="template" nolabel="1" widget="html" class="oe-bordered-editor"
+                               options="{'style-inline': true, 'codeview': true }"/>
+                    </group>
+                    <group>
+                        <field name="default" widget="boolean_toggle"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="model_id"/>
+                        </group>
+                        <group>
+                            <field name="model"/>
+                        </group>
+
+                        <field
+                                name="filter_domain"
+                                widget="domain"
+                                options="{'model': 'model', 'in_dialog': True}"
+                        />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sale_letter_template_tree" model="ir.ui.view">
+        <field name="name">sale.term.condition.tree</field>
+        <field name="model">term.condition</field>
+        <field name="arch" type="xml">
+            <tree string="Sale Term">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="model"/>
+                <field name="filter_domain" widget="domain" options="{'model': 'model', 'in_dialog': True}"/>
+                <field name="default" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+
+</odoo>

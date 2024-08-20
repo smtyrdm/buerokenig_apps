@@ -1,0 +1,12 @@
+<odoo>
+    <record id="view_product_attribute_form_label_inherit" model="ir.ui.view">
+        <field name="name">product.attribute.form.label.inherit</field>
+        <field name="model">product.attribute</field>
+        <field name="inherit_id" ref="product.product_attribute_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group" position="inside">
+                <field name="label_ids" widget="one2many" context="{'default_attribute_id': active_id}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

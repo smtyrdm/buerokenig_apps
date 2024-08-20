@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="sale_form_sale_order_term" model="ir.ui.view">
+        <field name="name">sale.order.form.term.invoice</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <!-- template_ids_domain -> web_domain_field modülü ile çalışıyor. -->
+                    <field name="template_ids_domain" invisible="1"/>
+                    <label for="template_ids" string="T&amp;C"/>
+                    <div class="d-inline-flex">
+                        <!--  attrs="{'readonly': [('name', '=', 'New')]}" -->
+                        <field name="template_ids" widget="many2many_tags"
+                               domain="template_ids_domain"/>
+                        <button type="object" name="button_reflesh_terms_conditions"
+                                class="btn-sm btn-link mb4 fa fa-refresh"
+                                aria-label="Refresh Terms and Condition" title="Refresh Terms and Condition"/>
+                    </div>
+                </xpath>
+                <xpath expr="//group[@name='note_group']" position="after">
+                    <group colspan="12" string="T&amp;C">
+                        <group colspan="12">
+                            <field name="sale_term" widget="html" nolabel="1"/>
+                        </group>
+                    </group>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+
+    <record id="sale_letter_template_formats" model="ir.actions.act_window">
+        <field name="name">Term And Condition</field>
+        <field name="res_model">term.condition</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('active_model','=','sale.order')]</field>
+        <field name="context">{'default_active_model': 'sale.order'}</field>
+    </record>
+</odoo>
