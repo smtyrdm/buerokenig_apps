@@ -4,7 +4,7 @@ class ProductAttributeLabel(models.Model):
     _name = 'product.attribute.label'
     _description = 'Product Attribute Label'
 
-    name = fields.Char("Label Name", required=True)
+    name = fields.Char("Label Name", required=True, translate=True)
     attribute_id = fields.Many2one('product.attribute', string="Attribute", required=True, ondelete='cascade')
 
 
