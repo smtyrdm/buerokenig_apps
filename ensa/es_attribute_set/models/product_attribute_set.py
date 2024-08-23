@@ -17,8 +17,7 @@ class ProductAttributeSetLine(models.Model):
     attribute_id = fields.Many2one(
         'product.attribute', string='Attribute', required=True)
     value_ids = fields.Many2many(
-        'product.attribute.value', string='Attribute Values')
-
+        'product.attribute.value', string='Attribute Values', domain="[('attribute_id', '=', attribute_id)]")
 
     @api.onchange('attribute_id')
     def _onchange_attribute_id(self):
