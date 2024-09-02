@@ -13,12 +13,15 @@ class ProductFetchWizard(models.Model):
     sku = fields.Char(string="SKU")
     product_type = fields.Selection([('simple', 'Simple'),
                                      ('configurable', 'Configurable'),
+                                     ('price_update', 'Price Update'),
                                      ], string="Product Type",)
 
     def fetch_products(self):
         """Fetch products from Magento"""
         if self.product_type == 'category':
             self.fetch_category()
+        elif self.product_type == 'price_update':
+            self._update_product_price()
         else:
             if self.sku:
                 self._fetch_product_by_sku(self.sku)
@@ -159,6 +162,25 @@ class ProductFetchWizard(models.Model):
             return image_base64
         else:
             return False
+
+    def _update_product_price(self):
+        """Update product prices based on their variants' lowest price in Magento."""
+        products = self.env['product.template'].search([('magento', '=', True)])
+
+        for product in products:
+            url = f'/rest/V1/configurable-products/{product.variant_code or product.default_code}/children'
+            children_products = self._magento_api_call(url)
+
+            if not children_products:
+                continue
+
+            prices = [child.get('price', 0.0) for child in children_products if 'price' in child]
+            if not prices:
+                continue
+
+            min_price = min(prices)
+
+            product.sudo().write({'list_price': min_price})
 
     # def fetch_category(self):
     #     url = '/rest/V1/categories'
