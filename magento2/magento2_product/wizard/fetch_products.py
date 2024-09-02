@@ -1,7 +1,8 @@
 import logging
 
 from odoo import models, fields, exceptions, _
-
+import base64
+import requests
 _logger = logging.getLogger(__name__)
 
 
@@ -10,24 +11,33 @@ class ProductFetchWizard(models.Model):
     _description = 'Product Fetch Wizard'
 
     sku = fields.Char(string="SKU")
-    product_type = fields.Selection([
-        ('simple', 'Simple'),
-        ('configurable', 'Configurable'),
-    ], string="Product Type", default='simple')
+    product_type = fields.Selection([('simple', 'Simple'),
+                                     ('configurable', 'Configurable'),
+                                     ], string="Product Type",)
 
     def fetch_products(self):
         """Fetch products from Magento"""
-        if self.sku:
-            self._fetch_product_by_sku(self.sku)
+        if self.product_type == 'category':
+            self.fetch_category()
         else:
-            self._fetch_products_by_type()
+            if self.sku:
+                self._fetch_product_by_sku(self.sku)
+            else:
+                self._fetch_products_by_type()
 
     def _fetch_product_by_sku(self, sku):
         """Fetch a specific product by SKU from Magento"""
         url = f'/rest/all/V1/products/{sku}'
-        magento_product = self._magento_api_call(url)
-        if magento_product:
-            self._process_product(magento_product)
+        item = self._magento_api_call(url)
+        if not item:
+            return
+        try:
+            product_template = self.env['product.template'].search(['|', ('default_code', '=', item['sku']), ('variant_code', '=', item['sku'])])  # variant_code
+            if not product_template:
+                self._process_product(item)
+        except Exception as e:
+            _logger.info("Exception occured 11 %s", e)
+            raise exceptions.UserError(_("Error Occured 11 %s") % e)
 
     def _fetch_products_by_type(self):
         """Fetch products by type from Magento"""
@@ -36,10 +46,16 @@ class ProductFetchWizard(models.Model):
 
         if not magento_products:
             return
-
-        items = magento_products.get('items', [])
-        for item in items:
-            self._process_product(item)
+        try:
+            items = magento_products.get('items', [])
+            for item in items:
+                product_template = self.env['product.template'].search(['|', ('default_code', '=', item['sku']), ('variant_code', '=', item['sku'])])  # variant_code
+                if product_template:
+                    continue
+                self._process_product(item)
+        except Exception as e:
+            _logger.info("Exception occured 22 %s", e)
+            raise exceptions.UserError(_("Error Occured 22 %s") % e)
 
     def _magento_api_call(self, url, method='GET', headers=None):
         """Call Magento API and return the response"""
@@ -51,29 +67,46 @@ class ProductFetchWizard(models.Model):
 
     def _process_product(self, item):
         """Process each product item from Magento"""
-        dropship_route = self.env['stock.location.route'].search([('name', '=', 'Dropship')], limit=1)
-        buy_route = self.env['stock.location.route'].search([('name', '=', 'Buy')], limit=1)
-        vendor = self.env['res.partner'].search([('name', '=', 'Tischkönig GmbH'),('route_ids', 'in', buy_route.ids)], limit=1)
-        product_template = self.env['product.template'].search([('default_code', '=', item['sku'])])
-        existing_seller = product_template.seller_ids.filtered(lambda s: s.name.id == vendor.id)
+        translated_routes = self.env['ir.translation'].sudo().search([
+            ('name', '=', 'stock.location.route,name'),
+            ('src', '=', 'Dropship'),
+            ('res_id', '!=', False)
+        ])
+        route_ids = list(set(translated_routes.mapped('res_id')))
+        if route_ids:
+            dropship_route = self.env['stock.location.route'].sudo().browse(route_ids[0])
+        else:
+            raise models.ValidationError("Dropship route not found in any language.")
+        
+        vendor = self.env['res.partner'].search([('name', '=', 'Tischkönig GmbH'), ('email', '=', 'verkauf@tischkoenig.de')], limit=1)
+        if not vendor:
+            raise models.ValidationError("{Vendor not!}")
+        custom_attributes = item.get("custom_attributes", [])
+        url_key_value = next((data.get("value","") for data in custom_attributes if data.get("attribute_code","") == "url_key"), False)
+        category = False
+        for name in  item['name'].split():
+            category1 = self.env['product.category'].search([('name', '=', name)])
+            category2 = self.env['product.category'].search([('name', '=', name.replace('u', 'ü'))])
+            if category1 or category2:
+                category = category1 or category2
+                break
+
         values = {
             'name': item['name'],
             'default_code': item['sku'],
+            'variant_code': item['sku'],
             'list_price': item.get('price', 0.0),
             'type': 'product',
             'magento': True,
+            'magento_product_id': item['id'],
+            'magento_url_key': url_key_value or False,
+            'image_1920': self._get_image(item) or False,
             'route_ids': [(6, 0, [dropship_route.id])] , # Dropship rotasını ekle
+            'seller_ids': [(0, 0, {'name': vendor.id})],
         }
-
-        # Eğer mevcut bir satıcı yoksa, yeni satıcı ekle
-        if not existing_seller:
-            values['seller_ids'] = [(0, 0, {'name': vendor.id})]  # Vendor id'sini ekle
-
-        if product_template:
-            product_template.sudo().write(values)
-        else:
-            product_template = self.env['product.template'].sudo().create(values)
-
+        if category:
+            values['categ_id'] = category.id
+        product_template = self.env['product.template'].sudo().create(values)
         self._update_translations(product_template.id, item['sku'])
 
     def _update_translations(self, res_id, sku):
@@ -110,3 +143,49 @@ class ProductFetchWizard(models.Model):
                 names[store.lang_id.code] = magento_product.get('name', '')
 
         return names
+
+    def _get_image(self, item):
+        ICPSudo = self.env['ir.config_parameter'].sudo()
+        magento_host = ICPSudo.get_param('magento2.magento_host')
+        custom_attributes = item.get("custom_attributes", [])
+        image_value = next((data.get("value","") for data in custom_attributes if data.get("attribute_code","") == "image"), False)
+        if magento_host and image_value:
+            image_url =  'https://'+magento_host+'/media/catalog/product/'+image_value
+            response = requests.get(image_url)
+            if response.ok and response.content:
+                image_base64 = base64.b64encode(response.content)
+            else:
+                image_base64 = False
+            return image_base64
+        else:
+            return False
+
+    # def fetch_category(self):
+    #     url = '/rest/V1/categories'
+    #     type = 'GET'
+    #
+    #     magento_category = self.env['magento.connector'].magento_api_call(headers={}, url=url, type=type)
+    #
+    #     try:
+    #         children_data = magento_category.get('children_data',[])
+    #         for parent in children_data:
+    #             if not parent.get('children_data',[]):
+    #
+    #                 odoo1 = self.env['product.category'].search([('name', 'ilike', parent['name'])])
+    #                 if not odoo1:
+    #                     continue
+    #                 odoo1.write({
+    #                     'magento_name': parent['name'],
+    #                     'magento_id': parent['id'],
+    #                 })
+    #             for children in parent.get('children_data',[]):
+    #                 odoo2= self.env['product.category'].search([('name', 'ilike', children['name'])])
+    #                 if not odoo2:
+    #                     continue
+    #                 odoo2.write({
+    #                     'magento_name': children['name'],
+    #                     'magento_id': children['id'],
+    #                 })
+    #     except Exception as e:
+    #         _logger.info("Exception occured %s", e)
+    #         raise exceptions.UserError(_("Error Occured %s") % e)

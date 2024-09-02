@@ -9,11 +9,11 @@
                 <form>
                     <sheet>
                         <group>
-                            <field name="sku" placeholder="Enter SKU"/>
-                            <field name="product_type" placeholder="Select Product Type"/>
-                            <p>The operation may take some time to complete. It depends on the number of products.
-                                Please wait patiently.
-                            </p>
+
+                            <field name="product_type"
+                                   attrs="{'invisible': [('sku', '!=', False)]}"/>
+                            <field name="sku" placeholder="Search: TKTM, PTM, ..."
+                                   attrs="{'invisible': [('product_type', '!=', False)]}"/>
                         </group>
                         <footer>
                             <button string='Fetch Products' name="fetch_products"
@@ -41,7 +41,7 @@
 
         <!-- Menu Item Definition -->
         <menuitem id="menu_magento_fetch_products"
-                  name="Fetch Magento Products"
+                  name="Fetch Products"
                   parent="magento2.magento_sync"
                   action="action_fetch_product"/>
     </data>

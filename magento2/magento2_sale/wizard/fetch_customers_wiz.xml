@@ -8,12 +8,13 @@
                 <form>
                     <sheet>
                         <p>The operation may take some time to complete. It depends on the number of records.
-                            Please wait patiently.</p>
+                            Please wait patiently.
+                        </p>
                         <footer>
                             <button string='Fetch Customers' name="fetch_customers"
-                                    type="object" class="btn-primary" />
+                                    type="object" class="btn-primary"/>
                             <button string="Cancel" class="btn-default" special="cancel"/>
-                      </footer>
+                        </footer>
                     </sheet>
                 </form>
             </field>

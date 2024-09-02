@@ -1,31 +1,37 @@
 from odoo import models, fields, api
 
-class MagentoProduct(models.Model):
-    _name = 'magento.product'
-    _description = 'Magento Product'
-
-    sku = fields.Char(string="Product SKU", required=True)
-    name = fields.Char(string="Product Name", translate=True)
-    price = fields.Float(string="Product Price")
-    status = fields.Selection([('1', 'Enabled'), ('2', 'Disabled')], string="Product Status")
-    type = fields.Char(string="Product Type")
-    visibility = fields.Selection([
-        ('1', 'Not Visible Individually'),
-        ('2', 'Catalog'),
-        ('3', 'Search'),
-        ('4', 'Catalog, Search')
-    ], string="Product Visibility")
-    magento_store_id = fields.Many2one(comodel_name='magento.stores', string="Magento Store")
-
-    _sql_constraints = [
-        ('sku_uniq', 'unique(sku)', 'The SKU must be unique!'),
-    ]
-
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     magento = fields.Boolean(string="Magento")
-    magento_product_id = fields.Many2one('magento.product', string="Magento Product")
+    magento_url_key =  fields.Char(string="Magento URL") # frond url giriş
+    magento_product_id = fields.Char(string="Magento Product") # admin paneline giriş
+
+    def action_magento_product_admin(self):
+        ICPSudo = self.env['ir.config_parameter'].sudo()
+        magento_admin_url = ICPSudo.get_param('magento2.magento_admin_url')
+        url = f"https://{magento_admin_url}/catalog/product/edit/id/{self.magento_product_id}/"
+        if magento_admin_url and self.magento_product_id:
+            return {
+                'type': 'ir.actions.act_url',
+                'url': url,
+                'target': 'new',  # Opens in a new tab
+            }
+    def action_magento_product_store(self):
+        ICPSudo = self.env['ir.config_parameter'].sudo()
+        magento_host = ICPSudo.get_param('magento2.magento_host')
+        url = f"https://{magento_host}/{self.magento_url_key}/"
+        if magento_host and self.magento_url_key:
+            return {
+                'type': 'ir.actions.act_url',
+                'url': url,
+                'target': 'new',  # Opens in a new tab
+            }
 
 
 
+# class ProductCategory(models.Model):
+#     _inherit = 'product.category'
+#
+#     magento_name = fields.Char(string="Magento Name")
+#     magento_id = fields.Char(string="Magento ID")

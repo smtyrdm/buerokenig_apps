@@ -13,9 +13,14 @@ class OrderFetchWizard(models.Model):
     _name = 'order.fetch.wizard'
     _description = 'Order Fetch Wizard'
 
+    date_start = fields.Date(string='Start Date')
+    date_end = fields.Date(string='End Date')
+
     def fetch_orders(self):
         increment_id =''
         ir_data = {'message':'','path':'fetch_orders.py', 'func':'fetch_orders','line':''}
+
+
 
         """Fetch products"""
         OrderObj = self.env['sale.order']
@@ -25,15 +30,47 @@ class OrderFetchWizard(models.Model):
         #       'searchCriteria[filter_groups][0][filters][0][value]=canceled&' \
         #       'searchCriteria[filter_groups][0][filters][0][condition_type]=neq'
 
-        url = '/rest/V1/orders?searchCriteria=0'
+        date_start = self.date_start or False
+        if not date_start:
+            date_start = fields.Date.to_string(datetime.today() - timedelta(days=7))
+
+        date_end = self.date_end or False
+        if not date_end:
+            date_end = fields.Date.to_string(datetime.today())
+
+
+
+        _logger.warning(f"{date_start} - {date_end}")
+
+        # url = '/rest/V1/orders?searchCriteria='
+
+        url = (f'/rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=created_at&'
+               f'searchCriteria[filter_groups][0][filters][0][value]={date_start}&'
+               f'searchCriteria[filter_groups][0][filters][0][condition_type]=gteq&'
+               f'searchCriteria[filter_groups][0][filters][1][field]=created_at&'
+               f'searchCriteria[filter_groups][0][filters][1][value]={date_end}&'
+               f'searchCriteria[filter_groups][0][filters][1][condition_type]=gteq')
+
+        # url = f'/rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=created_at&' \
+        #       f'searchCriteria[filter_groups][0][filters][0][value]={start_date}&' \
+        #       f'searchCriteria[filter_groups][0][filters][0][condition_type]=gteq&' \
+        #       f'searchCriteria[filter_groups][0][filters][1][field]=created_at&' \
+        #       f'searchCriteria[filter_groups][0][filters][1][value]={end_date}&' \
+        #       f'searchCriteria[filter_groups][0][filters][1][condition_type]=gteq'
+
+
+
         # url = (
         #     '/rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=increment_id&'
         #     'searchCriteria[filter_groups][0][filters][0][value]=000000551'
         # )
         type = 'GET'
         order_list = self.env['magento.connector'].magento_api_call(headers={},url=url,type=type)
+        _logger.warning("==1")
         try:
+            _logger.warning("==2")
             items = order_list['items']
+
             cr.execute("select magento_id from sale_order where magento_id is not null")
             orders = cr.fetchall()
             order_ids = [i[0] for i in orders] if orders else []
@@ -50,8 +87,9 @@ class OrderFetchWizard(models.Model):
             res = cr.fetchall()
             fields_list = [i[0] for i in res if res] or []
             order_vals = OrderObj.default_get(fields_list)
-
+            _logger.warning("==3")
             for i in items:
+                _logger.warning("==4")
                 increment_id = str(i['increment_id'])
                 magento_ir_logs = self.env['ir.logging'].search([('line','=',increment_id)])
                 if increment_id in magento_ir_logs.mapped('line'):
@@ -70,7 +108,9 @@ class OrderFetchWizard(models.Model):
                     order_vals['payment_term_id'], order_vals['incoterm']  = payment_method.id,  incoterm.id
 
                     order_line = []
+                    _logger.warning("==5")
                     for line in i['items']:
+                        _logger.warning("==6")
                         if line.get('parent_item_id'): # product_type": "configurable" bağlı simple geliyor.
                             continue
                         sku = line['sku']
@@ -118,5 +158,5 @@ class OrderFetchWizard(models.Model):
         except Exception as e:
             _logger.info("Exception occured %s", e)
             self.env['ir.logging'].magento_ir_logging(dict(ir_data, message=str(e), line=increment_id))
-            raise exceptions.UserError(_("Error Occured 4 %s") % e)
+            raise exceptions.UserError(_("Error Occured orders %s") % e)
 
