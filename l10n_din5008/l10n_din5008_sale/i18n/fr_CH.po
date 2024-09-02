@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-15 12:04+0000\n"
-"PO-Revision-Date: 2024-08-15 12:04+0000\n"
+"POT-Creation-Date: 2024-08-15 13:16+0000\n"
+"PO-Revision-Date: 2024-08-15 13:16+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -25,19 +25,19 @@ msgstr "Référence client"
 #: code:addons/l10n_din5008_sale/models/sale.py:0
 #, python-format
 msgid "Delivery Date"
-msgstr ""
+msgstr "La date de livraison"
 
 #. module: l10n_din5008_sale
 #: code:addons/l10n_din5008_sale/models/sale.py:0
 #, python-format
 msgid "Expiration"
-msgstr ""
+msgstr "Expiration"
 
 #. module: l10n_din5008_sale
 #: code:addons/l10n_din5008_sale/models/sale.py:0
 #, python-format
 msgid "Incoterm"
-msgstr "Incoterms"
+msgstr "Incoterm"
 
 #. module: l10n_din5008_sale
 #: code:addons/l10n_din5008_sale/models/sale.py:0
@@ -56,7 +56,7 @@ msgstr "Adresse de facturation et d'expédition:"
 #: code:addons/l10n_din5008_sale/models/sale.py:0
 #, python-format
 msgid "Kunden-Nr."
-msgstr ""
+msgstr "Numéro de client"
 
 #. module: l10n_din5008_sale
 #: model:ir.model.fields,field_description:l10n_din5008_sale.field_sale_order__l10n_din5008_addresses
@@ -95,7 +95,7 @@ msgstr "Facture pro forma"
 #: code:addons/l10n_din5008_sale/models/sale.py:0
 #, python-format
 msgid "Quotation"
-msgstr "Devis"
+msgstr "Citation"
 
 #. module: l10n_din5008_sale
 #: code:addons/l10n_din5008_sale/models/sale.py:0
