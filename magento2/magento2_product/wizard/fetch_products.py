@@ -1,8 +1,10 @@
 import logging
 
 from odoo import models, fields, exceptions, _
+import urllib.parse
 import base64
 import requests
+
 _logger = logging.getLogger(__name__)
 
 
@@ -14,7 +16,7 @@ class ProductFetchWizard(models.Model):
     product_type = fields.Selection([('simple', 'Simple'),
                                      ('configurable', 'Configurable'),
                                      ('price_update', 'Price Update'),
-                                     ], string="Product Type",)
+                                     ], string="Product Type", )
 
     def fetch_products(self):
         """Fetch products from Magento"""
@@ -30,12 +32,13 @@ class ProductFetchWizard(models.Model):
 
     def _fetch_product_by_sku(self, sku):
         """Fetch a specific product by SKU from Magento"""
-        url = f'/rest/all/V1/products/{sku}'
+        url = f'/rest/all/V1/products/{urllib.parse.quote(sku)}'
         item = self._magento_api_call(url)
         if not item:
             return
         try:
-            product_template = self.env['product.template'].search(['|', ('default_code', '=', item['sku']), ('variant_code', '=', item['sku'])])  # variant_code
+            product_template = self.env['product.template'].search(
+                ['|', ('default_code', '=', item['sku']), ('variant_code', '=', item['sku'])])  # variant_code
             if not product_template:
                 self._process_product(item)
         except Exception as e:
@@ -44,7 +47,21 @@ class ProductFetchWizard(models.Model):
 
     def _fetch_products_by_type(self):
         """Fetch products by type from Magento"""
-        url = f'/rest/all/V1/products?searchCriteria[filterGroups][0][filters][0][field]=type_id&searchCriteria[filterGroups][0][filters][0][value]={self.product_type}'
+        if self.product_type == 'simple':
+            url = (
+                f'/rest/all/V1/products?'
+                f'searchCriteria[filterGroups][0][filters][0][field]=type_id&'
+                f'searchCriteria[filterGroups][0][filters][0][value]={self.product_type}&'
+                f'searchCriteria[filterGroups][1][filters][0][field]=visibility&'
+                f'searchCriteria[filterGroups][1][filters][0][value]=4'
+            )
+        else:
+            # Diğer türler için visibility filtresi eklenmeden URL
+            url = (
+                f'/rest/all/V1/products?'
+                f'searchCriteria[filterGroups][0][filters][0][field]=type_id&'
+                f'searchCriteria[filterGroups][0][filters][0][value]={self.product_type}'
+            )
         magento_products = self._magento_api_call(url)
 
         if not magento_products:
@@ -52,7 +69,8 @@ class ProductFetchWizard(models.Model):
         try:
             items = magento_products.get('items', [])
             for item in items:
-                product_template = self.env['product.template'].search(['|', ('default_code', '=', item['sku']), ('variant_code', '=', item['sku'])])  # variant_code
+                product_template = self.env['product.template'].search(
+                    ['|', ('default_code', '=', item['sku']), ('variant_code', '=', item['sku'])])  # variant_code
                 if product_template:
                     continue
                 self._process_product(item)
@@ -80,14 +98,16 @@ class ProductFetchWizard(models.Model):
             dropship_route = self.env['stock.location.route'].sudo().browse(route_ids[0])
         else:
             raise models.ValidationError("Dropship route not found in any language.")
-        
-        vendor = self.env['res.partner'].search([('name', '=', 'Tischkönig GmbH'), ('email', '=', 'verkauf@tischkoenig.de')], limit=1)
+
+        vendor = self.env['res.partner'].search(
+            [('name', '=', 'Tischkönig GmbH'), ('email', '=', 'verkauf@tischkoenig.de')], limit=1)
         if not vendor:
             raise models.ValidationError("{Vendor not!}")
         custom_attributes = item.get("custom_attributes", [])
-        url_key_value = next((data.get("value","") for data in custom_attributes if data.get("attribute_code","") == "url_key"), False)
+        url_key_value = next(
+            (data.get("value", "") for data in custom_attributes if data.get("attribute_code", "") == "url_key"), False)
         category = False
-        for name in  item['name'].split():
+        for name in item['name'].split():
             category1 = self.env['product.category'].search([('name', '=', name)])
             category2 = self.env['product.category'].search([('name', '=', name.replace('u', 'ü'))])
             if category1 or category2:
@@ -104,7 +124,7 @@ class ProductFetchWizard(models.Model):
             'magento_product_id': item['id'],
             'magento_url_key': url_key_value or False,
             'image_1920': self._get_image(item) or False,
-            'route_ids': [(6, 0, [dropship_route.id])] , # Dropship rotasını ekle
+            'route_ids': [(6, 0, [dropship_route.id])],  # Dropship rotasını ekle
             'seller_ids': [(0, 0, {'name': vendor.id})],
         }
         if category:
@@ -140,7 +160,7 @@ class ProductFetchWizard(models.Model):
         names = {}
         stores = self.env['magento.stores'].search([('lang_id', '!=', None)])
         for store in stores:
-            url = f'/rest/all/V1/products/{sku}?storeId={store.store_id}'
+            url = f'/rest/all/V1/products/{urllib.parse.quote(sku)}?storeId={store.store_id}'
             magento_product = self._magento_api_call(url)
             if magento_product:
                 names[store.lang_id.code] = magento_product.get('name', '')
@@ -151,9 +171,10 @@ class ProductFetchWizard(models.Model):
         ICPSudo = self.env['ir.config_parameter'].sudo()
         magento_host = ICPSudo.get_param('magento2.magento_host')
         custom_attributes = item.get("custom_attributes", [])
-        image_value = next((data.get("value","") for data in custom_attributes if data.get("attribute_code","") == "image"), False)
+        image_value = next(
+            (data.get("value", "") for data in custom_attributes if data.get("attribute_code", "") == "image"), False)
         if magento_host and image_value:
-            image_url =  'https://'+magento_host+'/media/catalog/product/'+image_value
+            image_url = 'https://' + magento_host + '/media/catalog/product/' + image_value
             response = requests.get(image_url)
             if response.ok and response.content:
                 image_base64 = base64.b64encode(response.content)
@@ -168,7 +189,7 @@ class ProductFetchWizard(models.Model):
         products = self.env['product.template'].search([('magento', '=', True)])
 
         for product in products:
-            url = f'/rest/V1/configurable-products/{product.variant_code or product.default_code}/children'
+            url = f'/rest/V1/configurable-products/{urllib.parse.quote(product.variant_code or product.default_code)}/children'
             children_products = self._magento_api_call(url)
 
             if not children_products:
