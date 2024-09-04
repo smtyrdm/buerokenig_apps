@@ -15,15 +15,18 @@ class ProductFetchWizard(models.Model):
     sku = fields.Char(string="SKU")
     product_type = fields.Selection([('simple', 'Simple'),
                                      ('configurable', 'Configurable'),
-                                     ('price_update', 'Price Update'),
+                                     ('update_price', 'Update Price'),
+                                     ('update_product_name', 'Update Product Name'),
                                      ], string="Product Type", )
 
     def fetch_products(self):
         """Fetch products from Magento"""
         if self.product_type == 'category':
             self.fetch_category()
-        elif self.product_type == 'price_update':
+        elif self.product_type == 'update_price':
             self._update_product_price()
+        elif self.product_type == 'update_product_name':
+            self._update_product_name()
         else:
             if self.sku:
                 self._fetch_product_by_sku(self.sku)
@@ -37,8 +40,9 @@ class ProductFetchWizard(models.Model):
         if not item:
             return
         try:
-            product_template = self.env['product.template'].search(
-                ['|', ('default_code', '=', item['sku']), ('variant_code', '=', item['sku'])])  # variant_code
+            domain = ['|', '|', ('default_code', '=', item['sku']), ('variant_code', '=', item['sku']), '&',
+                      ('magento_product_id', '=', item['id']), ('name', '=', item['name'])]
+            product_template = self.env['product.template'].search(domain)  # variant_code
             if not product_template:
                 self._process_product(item)
         except Exception as e:
@@ -69,8 +73,9 @@ class ProductFetchWizard(models.Model):
         try:
             items = magento_products.get('items', [])
             for item in items:
-                product_template = self.env['product.template'].search(
-                    ['|', ('default_code', '=', item['sku']), ('variant_code', '=', item['sku'])])  # variant_code
+                domain = ['|', '|', ('default_code', '=', item['sku']), ('variant_code', '=', item['sku']), '&',
+                          ('magento_product_id', '=', item['id']), ('name', '=', item['name'])]
+                product_template = self.env['product.template'].search(domain)  # variant_code
                 if product_template:
                     continue
                 self._process_product(item)
@@ -202,6 +207,15 @@ class ProductFetchWizard(models.Model):
             min_price = min(prices)
 
             product.sudo().write({'list_price': min_price})
+
+    def _update_product_name(self):
+        """Update product names based on their variants"""
+        products = self.env['product.template'].search([('magento', '=', True)])
+        for product in products:
+            sku = product.variant_code or product.default_code
+            if not sku:
+                continue
+            self._update_translations(product.id,sku)
 
     # def fetch_category(self):
     #     url = '/rest/V1/categories'
