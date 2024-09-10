@@ -6,6 +6,7 @@
     'depends': ['base', 'product', 'magento2', 'stock'],
     'data': ['security/ir.model.access.csv',
              'views/product_template.xml',
+             'views/ptal.xml',
              'wizard/fetch_products_wiz.xml',
              ],
     'images': ['static/description/banner.png'],

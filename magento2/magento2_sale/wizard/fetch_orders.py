@@ -149,6 +149,8 @@ class OrderFetchWizard(models.Model):
                     odoo_total = round(odoo_new.amount_total,2)
                     if magento_total != odoo_total:
                         raise models.ValidationError(f"m != o ->{magento_total} != {odoo_total} -> code_line:112")
+                    # engin: 03.09.2024: 3 döngü var, 2 si başarılı 1 başarız ise 2 oluşması için direk vt kayıt et.
+                    self.env.cr.commit()
 
             return {
                 'type': 'ir.actions.client',

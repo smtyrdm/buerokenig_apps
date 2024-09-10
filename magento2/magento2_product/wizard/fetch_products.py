@@ -123,6 +123,7 @@ class ProductFetchWizard(models.Model):
             'name': item['name'],
             'default_code': item['sku'],
             'variant_code': item['sku'],
+            'magento_sku': item['sku'],
             'list_price': item.get('price', 0.0),
             'type': 'product',
             'magento': True,

@@ -1,4 +1,8 @@
 from odoo import models, fields, api
+import json
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
@@ -6,6 +10,9 @@ class ProductTemplate(models.Model):
     magento = fields.Boolean(string="Magento")
     magento_url_key =  fields.Char(string="Magento URL") # frond url giriş
     magento_product_id = fields.Char(string="Magento Product") # admin paneline giriş
+
+    magento_sku = fields.Char(string="Magento SKU") # magento ana SKU göre API istekleri yapılması.
+
 
     def action_magento_product_admin(self):
         ICPSudo = self.env['ir.config_parameter'].sudo()
@@ -27,7 +34,6 @@ class ProductTemplate(models.Model):
                 'url': url,
                 'target': 'new',  # Opens in a new tab
             }
-
 
 
 # class ProductCategory(models.Model):
