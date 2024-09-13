@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="product_template_attribute_line_form_magento" model="ir.ui.view">
+            <field name="name">product.template.attribute.line.form.magento</field>
+            <field name="model">product.template.attribute.line</field>
+            <field name="inherit_id" ref="product.product_template_attribute_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='main_field']" position="after">
+                    <group string="magento2_product">
+                        <field name="product_tmpl_id" invisible="1"/>
+                        <field name="magento_option" string="Magento Option"
+                               widget="dynamic_dropdown"
+                               options="{'values':'dynamic_magento_option'}"
+                               context="{'product_tmpl_id': product_tmpl_id}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="product_template_attribute_value_tree_magento" model="ir.ui.view">
+            <field name="name">product.template.attribute.value.tree.magento</field>
+            <field name="model">product.template.attribute.value</field>
+            <field name="inherit_id" ref="product.product_template_attribute_value_view_tree"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="magento_option_value" string="Magento Option Value"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="product_template_attribute_value_form_magento" model="ir.ui.view">
+            <field name="name">product.template.attribute.value.form.magento</field>
+            <field name="model">product.template.attribute.value</field>
+            <field name="inherit_id" ref="product.product_template_attribute_value_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="attribute_line_id" invisible="1"/>
+                    <field name="magento_option_value" string="Magento Option Value"
+                           widget="dynamic_dropdown"
+                           options="{'values':'dynamic_magento_option_value'}"
+                           context="{'attribute_line_id': attribute_line_id}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
