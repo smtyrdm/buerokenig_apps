@@ -44,12 +44,13 @@ class OrderFetchWizard(models.Model):
 
         # url = '/rest/V1/orders?searchCriteria='
 
-        url = (f'/rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=created_at&'
-               f'searchCriteria[filter_groups][0][filters][0][value]={date_start}&'
-               f'searchCriteria[filter_groups][0][filters][0][condition_type]=gteq&'
-               f'searchCriteria[filter_groups][0][filters][1][field]=created_at&'
-               f'searchCriteria[filter_groups][0][filters][1][value]={date_end}&'
-               f'searchCriteria[filter_groups][0][filters][1][condition_type]=gteq')
+        url = (f'/rest/V1/orders?searchCriteria[filter_groups][1][filters][0][field]=created_at&'
+               f'searchCriteria[filter_groups][1][filters][0][condition_type]=from&'
+               f'searchCriteria[filter_groups][1][filters][0][value]={date_start}%2000:00:00&'
+               f'searchCriteria[filter_groups][2][filters][0][field]=created_at&'
+               f'searchCriteria[filter_groups][2][filters][0][condition_type]=to&'
+               f'searchCriteria[filter_groups][2][filters][0][value]={date_end}%2023:59:59')
+
 
         # url = f'/rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=created_at&' \
         #       f'searchCriteria[filter_groups][0][filters][0][value]={start_date}&' \

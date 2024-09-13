@@ -11,14 +11,21 @@
                 <xpath expr="//page[@name='general_information']" position="after">
                     <page name="magento" string="Magento">
                         <group>
-                            <group string="Magento Admin Panel">
+                            <group> <field name="magento_sku"/></group>
+                            <group>
+                                <field name="magento_type"/>
+                                <field name="magento"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
                                 <field name="magento_product_id"/>
                                 <button name="action_magento_product_admin" type="object" class="oe_stat_button"
                                         icon="fa-external-link"
                                         attrs="{'invisible': [('magento_product_id', '=', False)]}">Product Admin
                                 </button>
                             </group>
-                            <group string="Magento Store">
+                            <group>
                                 <field name="magento_url_key"/>
                                 <button name="action_magento_product_store" type="object" class="oe_stat_button"
                                         icon="fa-external-link"

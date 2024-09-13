@@ -12,6 +12,7 @@ class ProductTemplate(models.Model):
     magento_product_id = fields.Char(string="Magento Product") # admin paneline giriş
 
     magento_sku = fields.Char(string="Magento SKU") # magento ana SKU göre API istekleri yapılması.
+    magento_type = fields.Selection([('configurable', 'Configurable'),('simple', 'Simple')], 'Magento Type')
 
 
     def action_magento_product_admin(self):

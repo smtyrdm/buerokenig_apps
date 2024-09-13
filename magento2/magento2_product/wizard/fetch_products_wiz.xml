@@ -10,10 +10,9 @@
                     <sheet>
                         <group>
 
-                            <field name="product_type"
-                                   attrs="{'invisible': [('sku', '!=', False)]}"/>
+                            <field name="product_type"/>
                             <field name="sku" placeholder="Search: TKTM, PTM, ..."
-                                   attrs="{'invisible': [('product_type', '!=', False)]}"/>
+                                   attrs="{'invisible': [('product_type', '!=', 'SKU')]}"/>
                         </group>
                         <footer>
                             <button string='Fetch Products' name="fetch_products"
