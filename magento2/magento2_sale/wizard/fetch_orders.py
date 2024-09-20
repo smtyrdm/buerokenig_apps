@@ -13,22 +13,29 @@ class OrderFetchWizard(models.Model):
     _name = 'order.fetch.wizard'
     _description = 'Order Fetch Wizard'
 
+
+    order_type = fields.Selection([('date', 'Date'),('increment_id', 'Magento ID')], default="date", string="Product Type", )
+
     date_start = fields.Date(string='Start Date')
     date_end = fields.Date(string='End Date')
+
+    increment_id = fields.Char(String="Magento ID")
 
     def fetch_orders(self):
         increment_id =''
         ir_data = {'message':'','path':'fetch_orders.py', 'func':'fetch_orders','line':''}
 
-
-
         """Fetch products"""
         OrderObj = self.env['sale.order']
         ProductObj = self.env['product.product']
         cr = self._cr
-        # url = '/rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=status&' \
-        #       'searchCriteria[filter_groups][0][filters][0][value]=canceled&' \
-        #       'searchCriteria[filter_groups][0][filters][0][condition_type]=neq'
+
+        base_url = '/rest/V1/orders?'
+
+        # Status filtresi (status değeri 'canceled' olmayan)
+        status_filter = ('searchCriteria[filter_groups][0][filters][0][field]=status&'
+                         'searchCriteria[filter_groups][0][filters][0][condition_type]=neq&'
+                         'searchCriteria[filter_groups][0][filters][0][value]=canceled&')
 
         date_start = self.date_start or False
         if not date_start:
@@ -39,32 +46,25 @@ class OrderFetchWizard(models.Model):
             date_end = fields.Date.to_string(datetime.today())
 
 
+        # created_at başlangıç ve bitiş tarihleri filtresi
+        date_filter = (f'searchCriteria[filter_groups][1][filters][0][field]=created_at&'
+                       f'searchCriteria[filter_groups][1][filters][0][condition_type]=from&'
+                       f'searchCriteria[filter_groups][1][filters][0][value]={date_start}%2000:00:00&'
+                       f'searchCriteria[filter_groups][2][filters][0][field]=created_at&'
+                       f'searchCriteria[filter_groups][2][filters][0][condition_type]=to&'
+                       f'searchCriteria[filter_groups][2][filters][0][value]={date_end}%2023:59:59')
 
-        _logger.warning(f"{date_start} - {date_end}")
+        # URL'yi birleştirme
+        url = f'{base_url}{status_filter}{date_filter}'
 
-        # url = '/rest/V1/orders?searchCriteria='
+        if self.order_type == 'increment_id' and self.increment_id:
+            # increment_id filtresi
+            increment_filter = (f'searchCriteria[filter_groups][0][filters][0][field]=increment_id&'
+                                f'searchCriteria[filter_groups][0][filters][0][value]={self.increment_id}')
+            url = f'{base_url}{increment_filter}'
+        if self.order_type == 'increment_id' and not self.increment_id:
+            raise models.ValidationError("Lütfen increment_id giriniz..")
 
-        url = (f'/rest/V1/orders?searchCriteria[filter_groups][1][filters][0][field]=created_at&'
-               f'searchCriteria[filter_groups][1][filters][0][condition_type]=from&'
-               f'searchCriteria[filter_groups][1][filters][0][value]={date_start}%2000:00:00&'
-               f'searchCriteria[filter_groups][2][filters][0][field]=created_at&'
-               f'searchCriteria[filter_groups][2][filters][0][condition_type]=to&'
-               f'searchCriteria[filter_groups][2][filters][0][value]={date_end}%2023:59:59')
-
-
-        # url = f'/rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=created_at&' \
-        #       f'searchCriteria[filter_groups][0][filters][0][value]={start_date}&' \
-        #       f'searchCriteria[filter_groups][0][filters][0][condition_type]=gteq&' \
-        #       f'searchCriteria[filter_groups][0][filters][1][field]=created_at&' \
-        #       f'searchCriteria[filter_groups][0][filters][1][value]={end_date}&' \
-        #       f'searchCriteria[filter_groups][0][filters][1][condition_type]=gteq'
-
-
-
-        # url = (
-        #     '/rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=increment_id&'
-        #     'searchCriteria[filter_groups][0][filters][0][value]=000000551'
-        # )
         type = 'GET'
         order_list = self.env['magento.connector'].magento_api_call(headers={},url=url,type=type)
         _logger.warning("==1")
@@ -97,12 +97,7 @@ class OrderFetchWizard(models.Model):
                     continue
                 if str(i['increment_id']) not in order_ids:
                     _logger.info("fetch_orders")
-                    res_contact, res_invoice, res_ship  = self.env['customer.fetch.wizard'].create_magento_customer(i)
-                    order_vals['magento'] = True
-                    order_vals['magento_id'], order_vals['magento_entity_id'] = str(i['increment_id']), i.get('entity_id','')
-                    order_vals['partner_id'], order_vals['partner_invoice_id'], order_vals['partner_shipping_id'] = res_contact.id, res_invoice.id, res_ship.id
-                    order_vals['magento_status'] = i.get('state') or i.get('status')
-                    order_vals['date_order'] = i.get('created_at')
+
 
                     payment_method = self.env['magento.account.payment'].find_magento_payment(i)
                     incoterm = self.env['magento.account.incoterm'].find_magento_incoterm(i,'incoterm')
@@ -144,6 +139,16 @@ class OrderFetchWizard(models.Model):
                     odoo_subtotal = round(sum(item[2]['price_unit'] * item[2]['product_uom_qty'] for item in order_line),2)
                     if magento_subtotal != odoo_subtotal:
                         raise models.ValidationError(f" m != o ->{magento_subtotal} != {odoo_subtotal} -> ,code_line:106")
+
+                    # burda olmasının nedesi sequence hata da olsa artıyor.
+                    res_contact, res_invoice, res_ship  = self.env['customer.fetch.wizard'].create_magento_customer(i)
+                    order_vals['magento'] = True
+                    order_vals['magento_id'], order_vals['magento_entity_id'] = str(i['increment_id']), i.get('entity_id','')
+                    order_vals['partner_id'], order_vals['partner_invoice_id'], order_vals['partner_shipping_id'] = res_contact.id, res_invoice.id, res_ship.id
+                    order_vals['magento_status'] = i.get('state') or i.get('status')
+                    order_vals['date_order'] = i.get('created_at')
+
+
                     odoo_new = OrderObj.create(order_vals)
                     # odoo total == magento total
                     magento_total = i.get('total_paid',0) or i['total_due'] # paypal ile ödediyse total_due boş  geliyor.

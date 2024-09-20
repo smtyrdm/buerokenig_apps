@@ -22,9 +22,9 @@ class ProductFetchWizard(models.Model):
 
     def fetch_products(self):
         """Fetch products from Magento"""
-        if  self.product_type == 'SKU' and self.sku:
+        if self.product_type == 'SKU' and self.sku:
             self._fetch_product_by_sku(self.sku)
-        elif self.product_type in ['simple','configurable']:
+        elif self.product_type in ['simple', 'configurable']:
             self._fetch_products_by_type()
         elif self.product_type == 'update_price':
             self._update_product_price()
@@ -38,7 +38,7 @@ class ProductFetchWizard(models.Model):
         if not item:
             return
         try:
-            domain = [('magento_sku', '=', item.get('sku',''))]
+            domain = [('magento_sku', '=', item.get('sku', ''))]
             product_template = self.env['product.template'].search(domain)  # variant_code
             if not product_template:
                 self._process_product(item)
@@ -55,7 +55,9 @@ class ProductFetchWizard(models.Model):
                 f'searchCriteria[filterGroups][0][filters][0][field]=type_id&'
                 f'searchCriteria[filterGroups][0][filters][0][value]={self.product_type}&'
                 f'searchCriteria[filterGroups][1][filters][0][field]=visibility&'
-                f'searchCriteria[filterGroups][1][filters][0][value]=4'
+                f'searchCriteria[filterGroups][1][filters][0][value]=4&'
+                f'searchCriteria[filterGroups][2][filters][0][field]=status&'
+                f'searchCriteria[filterGroups][2][filters][0][value]=1'
             )
         else:
             # Diğer türler için visibility filtresi eklenmeden URL
@@ -71,7 +73,7 @@ class ProductFetchWizard(models.Model):
         try:
             items = magento_products.get('items', [])
             for item in items:
-                domain = [('magento_sku', '=', item.get('sku',''))]
+                domain = [('magento_sku', '=', item.get('sku', ''))]
                 product_template = self.env['product.template'].search(domain)  # variant_code
                 if product_template:
                     continue
@@ -121,7 +123,7 @@ class ProductFetchWizard(models.Model):
             'default_code': item['sku'],
             'variant_code': item['sku'],
             'magento_sku': item['sku'],
-            'magento_type': item.get('type_id',''),
+            'magento_type': item.get('type_id', ''),
             'list_price': item.get('price', 0.0),
             'type': 'product',
             'magento': True,
@@ -188,9 +190,6 @@ class ProductFetchWizard(models.Model):
         else:
             return False
 
-
-
-
     def _update_product_price(self):
         """Update product prices based on their variants' lowest price in Magento."""
         products = self.env['product.template'].search([('magento', '=', True)])
@@ -217,4 +216,4 @@ class ProductFetchWizard(models.Model):
             sku = magento_sku
             if not sku:
                 continue
-            self._update_translations(product.id,sku)
+            self._update_translations(product.id, sku)

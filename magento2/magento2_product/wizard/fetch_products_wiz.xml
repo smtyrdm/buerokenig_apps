@@ -42,6 +42,7 @@
         <menuitem id="menu_magento_fetch_products"
                   name="Fetch Products"
                   parent="magento2.magento_sync"
-                  action="action_fetch_product"/>
+                  action="action_fetch_product"
+                  groups="base.user_admin"/>
     </data>
 </odoo>

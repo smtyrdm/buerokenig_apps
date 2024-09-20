@@ -8,7 +8,7 @@ _logger = logging.getLogger(__name__)
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    magento_json_data = fields.Text(string='JSON Data')
+    magento_json_data = fields.Text(string='JSON Data',tracking=False)
 
     def action_magento_option(self):
         for rec in self:
