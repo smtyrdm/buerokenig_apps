@@ -2,13 +2,14 @@ from odoo import models, fields, api
 import json
 import logging
 import ast
+
 _logger = logging.getLogger(__name__)
 
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    magento_json_data = fields.Text(string='JSON Data',tracking=False)
+    magento_json_data = fields.Text(string='JSON Data', tracking=False)
 
     def action_magento_option(self):
         for rec in self:
@@ -50,22 +51,44 @@ class ProductTemplate(models.Model):
                     _logger.warning("Title'lar eşleşmiyor lütfen kontrol ediniz: %s %s", unmatched_title, rec.name)
 
     def match_values_with_attribute_line(self, ptal, values):
+        unmatched_values = set()
         for value in values:
             value_title = value.get('title', '')
             value_sku = value.get('sku', '')
-            value_price = value.get('price',0)
+            value_price = value.get('price', 0)
+            matched = False
+
             for rec in ptal.value_ids:
                 if (
                         ptal.magento_option and
                         isinstance(rec.name, str) and rec.name == value_title or
                         isinstance(rec.variant_suffix, str) and rec.variant_suffix == value_sku or
-                        (isinstance(rec.variant_suffix, str) and isinstance(value_sku,str) and rec.variant_suffix in value_sku) or
-                        (isinstance(value_sku, str) and isinstance(rec.variant_suffix,str) and value_sku in rec.variant_suffix)
+                        (isinstance(rec.variant_suffix, str) and isinstance(value_sku,
+                                                                            str) and rec.variant_suffix in value_sku) or
+                        (isinstance(value_sku, str) and isinstance(rec.variant_suffix,
+                                                                   str) and value_sku in rec.variant_suffix)
                 ):
-                    ptav = self.env['product.template.attribute.value'].search([('product_attribute_value_id', '=', rec.id),('attribute_line_id', '=', ptal.id)],limit=1)
+                    ptav = self.env['product.template.attribute.value'].search([
+                        ('product_attribute_value_id', '=', rec.id),
+                        ('attribute_line_id', '=', ptal.id)
+                    ], limit=1)
+
                     ptav.price_extra = value_price
+                    matched = True
                     break
 
+            if not matched:
+                unmatched_values.add(f'Title: {value_title} Sku: {value_sku}')
+
+        if unmatched_values:
+            unmatched_values_str = ', '.join(unmatched_values)
+            data = {
+                'message': f"Eşleşmeyen değerler: {unmatched_values_str}",
+                'path': f"Title: {ptal.attribute_id.name}",
+                'func': f"Product: {ptal.product_tmpl_id.name}",
+                'line': 'N/A',
+            }
+            self.env['ir.logging'].magento_ir_logging(data,email=False)
 
     # compute_dynmaic_fields = fields.Boolean(string='Compute Dynmaic Fields', compute='_compute_dynmaic_fields')
     #
@@ -165,8 +188,9 @@ class ProductTemplateAttributeValue(models.Model):
             for item in data:
                 if item.get("title") == magento_option:
                     for value in item.get('values', []):
-                        #values += [(value.get('price', 0), f"{value.get('title', '')} SKU: {value.get('sku', '')}")]
-                        val = {"title": value.get('title', ""), "price": value.get('price', 0), "sku": value.get('sku', "")}
+                        # values += [(value.get('price', 0), f"{value.get('title', '')} SKU: {value.get('sku', '')}")]
+                        val = {"title": value.get('title', ""), "price": value.get('price', 0),
+                               "sku": value.get('sku', "")}
                         values += [
                             (f'{val}', f'{val}'),
                         ]
@@ -174,13 +198,13 @@ class ProductTemplateAttributeValue(models.Model):
 
     def write(self, vals):
         if 'magento_option_value' in vals:
-            vals['price_extra'] = ast.literal_eval(vals['magento_option_value'] or "{}").get('price',0)
+            vals['price_extra'] = ast.literal_eval(vals['magento_option_value'] or "{}").get('price', 0)
         return super(ProductTemplateAttributeValue, self).write(vals)
 
     @api.model
     def create(self, vals):
         if 'magento_option_value' in vals:
-            vals['price_extra'] = ast.literal_eval(vals['magento_option_value'] or "{}").get('price',0)
+            vals['price_extra'] = ast.literal_eval(vals['magento_option_value'] or "{}").get('price', 0)
         return super(ProductTemplateAttributeValue, self).create(vals)
 
 #

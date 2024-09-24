@@ -35,11 +35,19 @@ class ProductFetchWizard(models.Model):
         """Fetch a specific product by SKU from Magento"""
         url = f'/rest/all/V1/products/{urllib.parse.quote(sku)}'
         item = self._magento_api_call(url)
-        if not item:
+        if not item.get('sku', ''):
+            data = {
+                'message': f"Bu SKU'ya ait bir ürün bulunamadı: {sku}",
+                'path': "SKU CONTROL ET",
+                'func': sku,
+                'line': 'N/A',
+            }
+            self.env['ir.logging'].magento_ir_logging(data,email=False)
             return
         try:
             domain = [('magento_sku', '=', item.get('sku', ''))]
             product_template = self.env['product.template'].search(domain)  # variant_code
+
             if not product_template:
                 self._process_product(item)
         except Exception as e:
@@ -142,6 +150,16 @@ class ProductFetchWizard(models.Model):
         """Update product translations in multiple languages"""
         names = self._fetch_product_names(sku)
         for lang_code, name in names.items():
+            if not name:
+                data = {
+                    'message': f"Bu ürünün name alanında translate değerleri eksik: {sku}",
+                    'path': f"Lang : {lang_code}",
+                    'func': sku,
+                    'line': 'N/A',
+                }
+                self.env['ir.logging'].magento_ir_logging(data, email=False)
+                continue
+
             translation = self.env['ir.translation'].sudo().search([
                 ('name', '=', 'product.template,name'),
                 ('res_id', '=', res_id),
@@ -192,28 +210,48 @@ class ProductFetchWizard(models.Model):
 
     def _update_product_price(self):
         """Update product prices based on their variants' lowest price in Magento."""
+
+        def magento_log(product, message, path):
+            data = {
+                'message': f"{message}: {product.magento_sku}",
+                'path': path,
+                'func': product.magento_sku,
+                'line': 'N/A',
+            }
+            self.env['ir.logging'].magento_ir_logging(data, email=False)
+
         products = self.env['product.template'].search([('magento', '=', True)])
 
         for product in products:
-            url = f'/rest/V1/configurable-products/{urllib.parse.quote(product.magento_sku)}/children'
+            url = (f"/rest/V1/products/{urllib.parse.quote(product.magento_sku)}"
+                   if product.magento_type == 'simple' else
+                   f"/rest/V1/configurable-products/{urllib.parse.quote(product.magento_sku)}/children")
             children_products = self._magento_api_call(url)
 
             if not children_products:
                 continue
 
-            prices = [child.get('price', 0.0) for child in children_products if 'price' in child]
+            prices = [child.get('price', 0.0) for child in
+                      (children_products if product.magento_type == 'configurable' else [children_products])]
             if not prices:
+                magento_log(product, "Bu ürünün fiyat bilgileri eksik", f"{product.magento_type} : Ürün Fiyati Eksik")
+                continue
+
+            if product.magento_type == 'simple' and children_products.get('type_id', '') != product.magento_type:
+                magento_log(product, "Product Type'ları uyumsuz. Lütfen Kontrol Edin", "Product Type'ları uyumsuz")
                 continue
 
             min_price = min(prices)
-
             product.sudo().write({'list_price': min_price})
+
+            if product.magento_type not in ['simple', 'configurable']:
+                magento_log(product, "Ürün Type'ı belirtilmemiş bu yüzden fiyat çekimi yapılamıyor","Ürün Type'ı belirtilmemiş")
 
     def _update_product_name(self):
         """Update product names based on their variants"""
         products = self.env['product.template'].search([('magento', '=', True)])
         for product in products:
-            sku = magento_sku
+            sku = product.magento_sku
             if not sku:
                 continue
             self._update_translations(product.id, sku)

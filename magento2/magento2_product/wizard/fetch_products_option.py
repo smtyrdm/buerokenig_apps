@@ -25,7 +25,7 @@ class ProductFetchWizard(models.Model):
 
     def fetch_product_option(self):
         # products = self.env['product.template'].search([('magento', '=', True), ('variant_code', '=', 'SSP-EUROT-2-SZ')])
-        # products = self.env['product.template'].search([('magento', '=', True), ('variant_code', '=', 'SSP-EUROT-2-SZ')])
+        # products = self.env['product.template'].search([('magento', '=', True), ('magento_sku', '=', 'SOK-BINE-SET')])
         products = self.env['product.template'].search([('magento', '=', True)])
         for product in products:
             sku = urllib.parse.quote(product.magento_sku)
@@ -49,7 +49,7 @@ class ProductFetchWizard(models.Model):
 
             if conf_skus:
                 options.append({
-                    'title': 'CONFS', # title eklenecek
+                    'title': 'CONFS', #TODO titile eklenecek
                     'values': conf_skus
                 })
 
@@ -74,16 +74,21 @@ class ProductFetchWizard(models.Model):
         url = f'/rest/V1/configurable-products/{sku}/children'
         children_data = self._magento_api_call(url) or []
         conf_skus = []
-        sku_price_list = [{'sku': child.get('sku'), 'price': child.get('price')} for child in children_data if
-                          'sku' in child and 'price' in child]
+        sku_price_list = [
+            {'name': child.get('name'), 'sku': child.get('sku'), 'price': child.get('price')}
+            for child in children_data
+            if 'sku' in child and 'price' in child
+        ]
 
         if sku_price_list:
             min_price = min(sku['price'] for sku in sku_price_list)
 
-            conf_skus = [{
-                'sku': sku['sku'].split('-')[-1],
-                'price': round(sku['price'] - min_price, 2)
-            } for sku in sku_price_list]
+            conf_skus = [
+                {# 'sku': sku['sku'].split('-')[-1],
+                'sku': sku['name'].split('-')[-1], # sku'lara sürekli müdahele edildiği için name'in sonunu alıyorum sku için.
+                'price': round(sku['price'] - min_price, 2)}
+                for sku in sku_price_list
+            ]
 
         return conf_skus
 
