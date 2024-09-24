@@ -165,6 +165,6 @@ class OrderFetchWizard(models.Model):
 
         except Exception as e:
             _logger.info("Exception occured %s", e)
-            self.env['ir.logging'].magento_ir_logging(dict(ir_data, message=str(e), line=increment_id))
+            self.env['ir.logging'].magento_ir_logging(dict(ir_data, message=str(e), line=increment_id),email=True)
             raise exceptions.UserError(_("Error Occured orders %s") % e)
 

@@ -107,9 +107,9 @@ class CustomerFetchWizard(models.Model):
             bill_list['name'] = bill_list['company']
             bill_list.pop('company', None)
             for key, value in bill_list.items():
-                if value and key in ['phone']:
+                if value and key in ['phone']: # boşluklu geliyor.
                     domain.append((key, 'ilike', value))
-                elif value and key not in ['vat']:
+                elif value and key not in ['vat']: # boşluklu geliyor.
                     domain.append((key, '=', value))
             domain.append(('company_type', '=', 'company'))
             values = {'company_type': 'company', 'magento': True, 'magento_id': item.get('customer_id', False), 'active': True}
