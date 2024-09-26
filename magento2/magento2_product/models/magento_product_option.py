@@ -14,7 +14,6 @@ class ProductTemplate(models.Model):
     def action_magento_option(self):
         for rec in self:
             if rec.magento_json_data:
-                # JSON verisini yükle
                 data = json.loads(rec.magento_json_data or "[]")
                 unmatched_titles = set()
 
@@ -46,9 +45,17 @@ class ProductTemplate(models.Model):
                             if any(sku_check_results):
                                 unmatched_titles.add(title)
 
-                # Eşleşmeyen title'lar için loglama yap
-                for unmatched_title in unmatched_titles:
-                    _logger.warning("Title'lar eşleşmiyor lütfen kontrol ediniz: %s %s", unmatched_title, rec.name)
+                if unmatched_titles:
+                    unmatched_titles_str = ', '.join(unmatched_titles)
+                    log_data = {
+                        'message': f"Eşleşmeyen title'lar: {unmatched_titles_str}",
+                        'name': 'PTAL',
+                        'path': f"Product: {rec.name}",
+                        'func': f"Titlelar Eşleşmiyor",
+                        'line': rec.magento_sku,
+                    }
+
+                    self.log_if_not_exists(log_data)
 
     def match_values_with_attribute_line(self, ptal, values):
         unmatched_values = set()
@@ -57,8 +64,8 @@ class ProductTemplate(models.Model):
             value_sku = value.get('sku', '')
             value_price = value.get('price', 0)
             matched = False
-
             for rec in ptal.value_ids:
+
                 if (
                         ptal.magento_option and
                         isinstance(rec.name, str) and rec.name == value_title or
@@ -72,7 +79,6 @@ class ProductTemplate(models.Model):
                         ('product_attribute_value_id', '=', rec.id),
                         ('attribute_line_id', '=', ptal.id)
                     ], limit=1)
-
                     ptav.price_extra = value_price
                     matched = True
                     break
@@ -82,13 +88,27 @@ class ProductTemplate(models.Model):
 
         if unmatched_values:
             unmatched_values_str = ', '.join(unmatched_values)
-            data = {
+            log_data = {
                 'message': f"Eşleşmeyen değerler: {unmatched_values_str}",
-                'path': f"Title: {ptal.attribute_id.name}",
-                'func': f"Product: {ptal.product_tmpl_id.name}",
-                'line': 'N/A',
+                'name': 'PTAV',
+                'path': f"Product: {ptal.product_tmpl_id.name}",
+                'func': f"Title: {ptal.attribute_id.name}, SKU: {ptal.product_tmpl_id.magento_sku}",
+                'line': ptal.id,
             }
-            self.env['ir.logging'].magento_ir_logging(data,email=False)
+
+            self.log_if_not_exists(log_data)
+
+    def log_if_not_exists(self, log_data, email=False):
+        existing_log = self.env['ir.logging'].search([
+            ('name', '=', log_data.get('name')),
+            ('message', '=', log_data.get('message')),
+            ('path', '=', log_data.get('path')),
+            ('func', '=', log_data.get('func')),
+            ('line', '=', log_data.get('line'))
+        ], limit=1)
+
+        if not existing_log:
+            self.env['ir.logging'].magento_ir_logging(log_data, email=email)
 
     # compute_dynmaic_fields = fields.Boolean(string='Compute Dynmaic Fields', compute='_compute_dynmaic_fields')
     #
