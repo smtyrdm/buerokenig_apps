@@ -49,7 +49,7 @@ class ProductTemplate(models.Model):
                     unmatched_titles_str = ', '.join(unmatched_titles)
                     log_data = {
                         'message': f"Eşleşmeyen title'lar: {unmatched_titles_str}",
-                        'name': 'PTAL',
+                        'name': 'magento_ptal_title',
                         'path': f"Product: {rec.name}",
                         'func': f"Titlelar Eşleşmiyor",
                         'line': rec.magento_sku,
@@ -90,7 +90,7 @@ class ProductTemplate(models.Model):
             unmatched_values_str = ', '.join(unmatched_values)
             log_data = {
                 'message': f"Eşleşmeyen değerler: {unmatched_values_str}",
-                'name': 'PTAV',
+                'name': 'magento_ptav_name',
                 'path': f"Product: {ptal.product_tmpl_id.name}",
                 'func': f"Title: {ptal.attribute_id.name}, SKU: {ptal.product_tmpl_id.magento_sku}",
                 'line': ptal.id,

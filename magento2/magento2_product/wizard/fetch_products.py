@@ -153,6 +153,7 @@ class ProductFetchWizard(models.Model):
             if not name:
                 data = {
                     'message': f"Bu ürünün name alanında translate değerleri eksik: {sku}",
+                    'name': 'magento_pt_name',
                     'path': f"Lang : {lang_code}",
                     'func': sku,
                     'line': 'N/A',
@@ -211,9 +212,10 @@ class ProductFetchWizard(models.Model):
     def _update_product_price(self):
         """Update product prices based on their variants' lowest price in Magento."""
 
-        def magento_log(product, message, path):
+        def magento_log(product, message, path, name="magento"):
             data = {
                 'message': f"{message}: {product.magento_sku}",
+                'name': name,
                 'path': path,
                 'func': product.magento_sku,
                 'line': 'N/A',
@@ -234,18 +236,18 @@ class ProductFetchWizard(models.Model):
             prices = [child.get('price', 0.0) for child in
                       (children_products if product.magento_type == 'configurable' else [children_products])]
             if not prices:
-                magento_log(product, "Bu ürünün fiyat bilgileri eksik", f"{product.magento_type} : Ürün Fiyati Eksik")
+                magento_log(product, "Bu ürünün fiyat bilgileri eksik", f"{product.magento_type} : Ürün Fiyati Eksik", 'magento_pt_price')
                 continue
 
             if product.magento_type == 'simple' and children_products.get('type_id', '') != product.magento_type:
-                magento_log(product, "Product Type'ları uyumsuz. Lütfen Kontrol Edin", "Product Type'ları uyumsuz")
+                magento_log(product, "Product Type'ları uyumsuz. Lütfen Kontrol Edin", "Product Type'ları uyumsuz", 'magento_pt_type')
                 continue
 
             min_price = min(prices)
             product.sudo().write({'list_price': min_price})
 
             if product.magento_type not in ['simple', 'configurable']:
-                magento_log(product, "Ürün Type'ı belirtilmemiş bu yüzden fiyat çekimi yapılamıyor","Ürün Type'ı belirtilmemiş")
+                magento_log(product, "Ürün Type'ı belirtilmemiş bu yüzden fiyat çekimi yapılamıyor","Ürün Type'ı belirtilmemiş", 'magento_pt_type')
 
     def _update_product_name(self):
         """Update product names based on their variants"""
