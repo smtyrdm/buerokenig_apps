@@ -8,6 +8,7 @@
     'data': [
         'views/sale_order_tree.xml',
         'views/sale_order_form.xml',
+        'views/account_move.xml',
     ],
     'license': "OPL-1",
     'installable': True,

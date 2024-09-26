@@ -6,11 +6,19 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='source_id']" position="after">
-                    <field name="sent_tracking" string="Order Tracking" widget="boolean_toggle"/>
-                    <field name="is_sent_control" invisible="1"/>
+<!--                <xpath expr="//field[@name='source_id']" position="after">-->
+<!--                    <field name="sent_tracking" string="Order Tracking" widget="boolean_toggle"/>-->
+<!--                    <field name="is_sent_control" invisible="1"/>-->
+<!--                </xpath>-->
+                <xpath expr="//page[@name='other_information']/group" position="inside">
+                    <group string="Mail">
+                        <field name="sent_tracking" string="Order Tracking" widget="boolean_toggle"/>
+                        <field name="is_sent_control" invisible="1"/>
+                    </group>
                 </xpath>
             </field>
         </record>
+
+
     </data>
 </odoo>
