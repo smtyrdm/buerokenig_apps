@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+Copyright (C) 2015 DevIntelle Consulting Service Pvt.Ltd (<http://www.devintellecs.com>).
+
+For Module Support : devintelle@gmail.com  or Skype : devintelle
+ -->
+<odoo>
+
+    <record id="action_dev_reminder" model="ir.actions.server">
+        <field name="name">Sent Reminder</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <!--<field name="binding_view_types">list,form</field>-->
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">records.send_payment_reminder_manuel()</field>
+    </record>
+
+</odoo>

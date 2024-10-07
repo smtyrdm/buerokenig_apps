@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="es_account_reminder_conf_form" model="ir.ui.view">
+            <field name="name">Reminder</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+
+                    <page name="reminder" string="Reminder"
+                          attrs="{'invisible': [('reminder_compute', '=', False)]}">
+
+                        <group id="reminder_tab_group">
+                            <group string="Reminder" name="reminder_info_group">
+                                <field name="reminder_compute" invisible="1"/>
+                                <field name="reminder_template"/>
+                                <field name="is_reminder_sent"/>
+                                <field name="reminder_state" widget="boolean_toggle"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+
+        <record id="es_reminder_view_invoice_tree" model="ir.ui.view">
+            <field name="name">account.invoice.tree</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <tree string="Invoices"
+                      create="false" edit="false" delete="false"
+                      js_class="account_tree"
+                      decoration-info="state == 'draft'"
+                      decoration-muted="state == 'cancel'"
+                      sample="1">
+                    <field name="name" decoration-bf="1"/>
+
+                    <field name="date" optional="hide"
+                           invisible="context.get('default_move_type') in ('out_invoice', 'out_refund', 'out_receipt')"
+                           string="Accounting Date"/>
+                    <field name="invoice_date" string="Invoice Date" widget="remaining_days"/>
+                    <field name="invoice_payment_term_id"/>
+
+                    <!--                    <field name="invoice_date_due" widget="remaining_days" optional="show"-->
+                    <!--                           attrs="{'invisible': [['payment_state', 'in', ('paid', 'in_payment', 'reversed')]]}"/>-->
+
+
+                    <!--                    <field name="amount_untaxed_signed" string="Tax Excluded" sum="Total" optional="show"/>-->
+                    <field name="amount_total_signed" string="Total" sum="Total" decoration-bf="1" optional="show"/>
+
+                    <field name="payment_state"
+                           widget="badge"
+                           decoration-danger="payment_state == 'not_paid'"
+                           decoration-warning="payment_state in ('partial', 'in_payment')"
+                           decoration-success="payment_state in ('paid', 'reversed')"
+                           attrs="{'invisible': [('payment_state', 'in', ('invoicing_legacy'))]}"
+                           optional="show"/>
+                    <field name="state" widget="badge" decoration-success="state == 'posted'"
+                           decoration-info="state == 'draft'" optional="show"/>
+                    <field name="move_type" invisible="context.get('default_move_type', True)"/>
+
+                    <field name="reminder_template" optional="show"/>
+                    <field name="is_reminder_sent" readonly="1"/>
+                    <field name="reminder_state" widget="boolean_toggle"/>
+
+
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_account_invoice_filter" model="ir.ui.view">
+            <field name="name">account.invoice.select.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search/filter[@name='myinvoices']" position="before">
+                    <filter name="active_reminder" string="Active Reminder" domain="[('reminder_state', '=', True)]"/>
+                    <filter name="inactive_reminder" string="Inactive Reminder"
+                            domain="[('reminder_state', '=', False)]"/>
+                    <separator/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="es_reminder_tree_action" model="ir.actions.act_window">
+            <field name="name">Reminder</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="view_id" ref="es_reminder_view_invoice_tree"/>
+            <!-- <field name="search_view_id" ref="account.view_account_invoice_filter"/>-->
+            <field name="search_view_id" ref="view_account_invoice_filter"/>
+            <field name="domain">[('move_type', '=', 'out_invoice'),
+                ('invoice_date', '&lt;', (context_today() - relativedelta(days=9)).strftime('%Y-%m-%d')),
+                ('state', '=', 'posted'),
+                ('payment_state', 'in', ('not_paid', 'partial'))]
+            </field>
+            <field name="context">{'search_default_active_reminder': 1, 'reminder_server_action': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a customer invoice
+                </p>
+                <p>
+                    Create invoices, register payments and keep track of the discussions with your customers.
+                </p>
+            </field>
+        </record>
+
+
+
+
+
+
+        <!--        <menuitem action="action_dev_payment_reminder_config" id="menu_dev_payment_reminder_config"-->
+        <!--                  name="Payment Reminder"-->
+        <!--                  parent="reminder_configuration" sequence="1" groups="account.group_account_manager"/>-->
+
+
+    </data>
+</odoo>

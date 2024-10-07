@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<odoo>
+    <data noupdate="0">
+        <!--10-days (Zahlungserinnerung) -->
+        <record id="dev_10_days_reminder" model="mail.template">
+            <field name="name">1-Nr. (Zahlungserinnerung)</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="email_from">{{ (object.company_id.email_formatted) }}</field> <!-- gönderen -->
+            <field name="email_to">{{ (object.partner_id.email_formatted or object.partner_id.email) }}
+            </field><!--alıcı -->
+            <!--            <field name="reply_to">{{ (object.company_id.email_formatted) }}</field> &lt;!&ndash; yanıt &ndash;&gt;-->
+            <field name="subject">Zahlungserinnerung zur Rechnung {{ object.name or 'n/a' }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="report_template" ref="account.account_invoices"/>
+            <field name="report_name">Invoice_{{ (object.name or '').replace('/','_') }}</field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Sehr geehrte Damen und Herren,
+                        <br/>
+                        <br/>
+                        bei der oben aufgeführten Rechnung konnten wir leider noch keinen Zahlungseingang feststellen.
+                        Sicherlich handelt es sich nur um ein Versehen.
+                        <br/>
+                        <br/>
+                        Die Ausgangsrechnung liegt diesem Schreiben in Kopie bei. Da wir bislang nichts von Ihnen gehört
+                        haben, hoffen wir, dass Sie mit unseren Leistungen zufrieden waren. Sollte es diesbezüglich
+                        Beanstandungen geben, dann lassen Sie uns dies bitte umgehend wissen.
+                        <br/>
+                        <br/>
+                        Bei Rückfragen können Sie sich jederzeit an uns wenden. Sollten Sie die Zahlung mittlerweile
+                        veranlasst haben, betrachten Sie dieses Schreiben bitte als gegenstandslos.
+                        <br/>
+                        <br/>
+                        Mit freundlichen Grüßen,
+                    </p>
+                    <br/>
+                    <br/>
+                    Das Verkaufsteam
+                    <br/>
+                    <br/>
+                </div>
+            </field>
+        </record>
+        <!-- 1. Mahnung -->
+        <record id="dev_20_days_reminder" model="mail.template">
+            <field name="name">2-Nr. (1. Mahnung)</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="email_from">{{ (object.company_id.email_formatted) }}</field> <!-- gönderen -->
+            <field name="email_to">{{ (object.partner_id.email_formatted or object.partner_id.email) }}</field>
+            <field name="subject">1. Mahnung zur Rechnung {{ object.name or 'n/a' }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="report_template" ref="account.account_invoices"/>
+            <field name="report_name">Invoice_{{ (object.name or '').replace('/','_') }}</field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Sehr geehrte Damen und Herren,
+                        <br/>
+                        <br/>
+                        in der Anlage erhalten Sie die 1. Mahnung für
+                        <t t-if="object.name">
+                            <strong t-out="object.name or ''" style="box-sizing:border-box;font-weight:bolder;">
+                                Re.:/2024/00001
+                            </strong>
+                        </t>
+                        <br/>
+                        <br/>
+                        Wir bitten Sie die offenen Rechnungen schnellstmöglichst zu überweisen.
+                        <br/>
+                        <br/>
+                        Bei Rückfragen stehen wir Ihnen jederzeit gerne zur Verfügung.
+                        <br/>
+                        <br/>
+                        Mit freundlichen Grüßen,
+                    </p>
+                    <br/>
+                    <br/>
+                    Das Verkaufsteam
+                    <br/>
+                    <br/>
+                </div>
+            </field>
+        </record>
+        <!-- 2. Mahnung -->
+        <record id="dev_30_days_reminder" model="mail.template">
+            <field name="name">3-Nr. (2. Mahnung)</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="email_from">{{ (object.company_id.email_formatted) }}</field> <!-- gönderen -->
+            <field name="email_to">{{ (object.partner_id.email_formatted or object.partner_id.email) }}</field>
+            <field name="subject">2. Mahnung zur Rechnung {{ object.name or 'n/a' }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="report_template" ref="account.account_invoices"/>
+            <field name="report_name">Invoice_{{ (object.name or '').replace('/','_') }}</field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Sehr geehrte Damen und Herren,
+                        <br/>
+                        <br/>
+                        in der Anlage erhalten Sie die 2. Mahnung für
+                        <t t-if="object.name">
+                            <strong t-out="object.name or ''" style="box-sizing:border-box;font-weight:bolder;">
+                                Re.:/2024/00001
+                            </strong>
+                        </t>
+                        <br/>
+                        <br/>
+                        Wir bitten Sie die offenen Rechnungen schnellstmöglichst zu überweisen.
+                        <br/>
+                        <br/>
+                        Bei Rückfragen stehen wir Ihnen jederzeit gerne zur Verfügung.
+                        <br/>
+                        <br/>
+                        Mit freundlichen Grüßen,
+                    </p>
+                    <br/>
+                    <br/>
+                    Das Verkaufsteam
+                    <br/>
+                    <br/>
+                </div>
+            </field>
+        </record>
+        <!-- 3. Mahnung -->
+        <record id="dev_40_days_reminder" model="mail.template">
+            <field name="name">4-Nr. (Letzte Mahnung)</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="email_from">{{ (object.company_id.email_formatted) }}</field> <!-- gönderen -->
+            <field name="email_to">{{ (object.partner_id.email_formatted or object.partner_id.email) }}</field>
+            <field name="subject">Letzte Mahnung zur Rechnung {{ object.name or 'n/a' }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="report_template" ref="account.account_invoices"/>
+            <field name="report_name">Invoice_{{ (object.name or '').replace('/','_') }}</field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Sehr geehrte Damen und Herren,
+                        <br/>
+                        <br/>
+                        leider blieben unsere Zahlungsaufforderungen bislang unbeachtet.
+                        <br/>
+                        <br/>
+                        Anbei erhalten Sie unsere letzte Mahnung zur Rechnung
+                        <t t-if="object.name">
+                            <strong t-out="object.name or ''" style="box-sizing:border-box;font-weight:bolder;">
+                                Re.:/2024/00001
+                            </strong>
+                        </t>
+                        <br/>
+                        <br/>
+                        Wir bitten Sie die offenen Rechnungen schnellstmöglichst zu überweisen.
+                        <br/>
+                        <br/>
+                        Bei Nichtzahlung sind wir leider gezwungen, Ihren Vorgang und die daran gebundenen Daten an eine
+                        Rechtsanwaltskanzlei oder ein Inkasso-Büro zu übermitteln.
+                        <br/>
+                        <br/>
+                        Bei Rückfragen stehen wir Ihnen jederzeit gerne zur Verfügung.
+                        <br/>
+                        <br/>
+                        Mit freundlichen Grüßen,
+                    </p>
+                    <br/>
+                    <br/>
+                    Das Verkaufsteam
+                    <br/>
+                    <br/>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

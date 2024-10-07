@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2015 DevIntelle Consulting Service Pvt.Ltd (<http://www.devintellecs.com>).
+
+For Module Support : devintelle@gmail.com  or Skype : devintelle 
+ -->
+<odoo>
+    <record id="view_dev_payment_reminder_config_tree" model="ir.ui.view">
+        <field name="name">view.payment.reminder.config.tree</field>
+        <field name="model">payment.reminder.config</field>
+        <field name="arch" type="xml">
+            <tree string="Payment Reminder" multi_edit="1">
+                <field name="day"/>
+
+                <field name="template_id" widget="many2onebutton"/>
+                <!-- widget="domain" to widget="terabits_domain" -->
+                <field
+                        name="filter_domain"
+                        widget="terabits_domain"
+                        options="{'model': 'account.move'}"
+                />
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_dev_payment_reminder_config_form" model="ir.ui.view">
+        <field name="name">view.payment.reminder.config.form</field>
+        <field name="model">payment.reminder.config</field>
+        <field name="arch" type="xml">
+            <form string="Payment Reminder">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="day"/>
+
+                        </group>
+                        <group>
+                            <field name="template_id" widget="many2onebutton"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Filters">
+                            <!-- widget="domain" to widget="terabits_domain" -->
+                            <field name="filter_domain" widget="terabits_domain" options="{'model': 'account.move'}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_dev_payment_reminder_config" model="ir.actions.act_window">
+        <field name="name">Payment Reminder</field>
+        <field name="res_model">payment.reminder.config</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="reminder_main_menu" action="es_reminder_tree_action" name="Reminder" sequence="1"
+                  groups="account.group_account_invoice"/>
+        <menuitem id="reminder_configuration" name="Configuration" parent="reminder_main_menu" sequence="10"
+                  groups="account.group_account_manager"/>
+        <!-- Configuration -->
+        <menuitem action="action_dev_payment_reminder_config" id="menu_dev_payment_reminder_config" name="Payment Reminder"
+                  parent="reminder_configuration" sequence="1" groups="account.group_account_invoice"/>
+        <menuitem action="reminder_settings_cron_action" id="reminder_configuration_cron_settings" name="Cron Settings"
+                  parent="reminder_configuration" sequence="2" groups="account.group_account_invoice"/>
+
+
+    </data>
+</odoo>

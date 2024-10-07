@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="reminder_settings_cron_action" model="ir.actions.act_window">
+            <field name="name">Cron Settings</field>
+            <field name="res_model">ir.cron</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_no content_create">
+                    Click to create a Cron.
+                </p>
+            </field>
+            <field name="context">{'search_default_all' : 1}</field>
+            <field name="domain">[('name','ilike', 'Invoice Payment Reminder')]</field>
+        </record>
+
+    </data>
+</odoo>
