@@ -23,10 +23,12 @@ class ProductFetchWizard(models.Model):
         if self.product_type == 'product_option_price_update':
             self.fetch_product_option()
 
-    def fetch_product_option(self):
+    def fetch_product_option(self, item=False):
         # products = self.env['product.template'].search([('magento', '=', True), ('variant_code', '=', 'SSP-EUROT-2-SZ')])
-        # products = self.env['product.template'].search([('magento', '=', True), ('magento_sku', '=', 'SOK-BINE-SET')])
-        products = self.env['product.template'].search([('magento', '=', True)])
+        if item:
+            products = self.env['product.template'].search([('magento', '=', True), ('magento_sku', '=', item.magento_sku)])
+        else:
+            products = self.env['product.template'].search([('magento', '=', True)])
         for product in products:
             sku = urllib.parse.quote(product.magento_sku)
             url = f'/rest/all/V1/products/{sku}'
@@ -48,8 +50,8 @@ class ProductFetchWizard(models.Model):
             options = prod_option.get('options', [])
 
             if conf_skus:
-                options.append({
-                    'title': 'CONFS', #TODO titile eklenecek
+                options.insert(0, {
+                    'title': 'CONFS',  # TODO title eklenecek
                     'values': conf_skus
                 })
 
